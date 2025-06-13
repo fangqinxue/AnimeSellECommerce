@@ -5,6 +5,10 @@
     justify-content: space-between;
     padding:30px 100px;
 
+    background-color: antiquewhite;
+    position: sticky;
+    z-index: 2;
+
 
     
 
@@ -14,8 +18,6 @@
     display: inline-block;
     height: 60px;
     width: 60px;
-    z-index: 1;
-    position:sticky;
 
 }
 

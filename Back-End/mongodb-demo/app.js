@@ -16,18 +16,24 @@ const app = express();
 
 // 中间件
 app.use(cors());
-
 //需要解决跨域问题
 app.use(cors({
   origin: 'http://localhost:5173', // 或 origin: true 表示允许任意
   credentials: true,
 }))
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//注册了静态资源，可以加载static里面的图片资源了。
+app.use('/static', express.static('static'));
+
+
 
 // 路由
 
 app.use('/api/auth', require('./routes/auth'));
+
 
 const PORT = process.env.PORT ;
 // || 3000
