@@ -1,0 +1,26 @@
+.navbar{
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:30px 100px;
+
+
+    
+
+}
+
+.navbar img {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    z-index: 1;
+    position:sticky;
+
+}
+
+.navbar nav {
+    display: flex;
+    gap: 1rem;
+
+}

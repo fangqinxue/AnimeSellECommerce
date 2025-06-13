@@ -1,0 +1,63 @@
+
+body {
+    margin: 0;
+    height: 100vh;
+    position: relative;
+}
+
+.signup {
+    height: 600px;
+    width: 400px;
+
+    padding: 20px;
+    border: 1px solid rgb(220, 217, 217);
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* 关键：使元素自身中心对齐 */
+}
+
+.Form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    margin: 10px;
+    height: 40px;
+    width:100%;
+    border: 1px solid black;
+    border-radius: 7px;
+}
+
+input:hover {
+    border-color: rgb(190, 190, 191);
+}
+
+button {
+    margin: 10px;
+    height: 40px;
+    width:50%;
+    border: 1px solid black;
+    border-radius: 7px;
+}
+
+button:hover {
+    border-color: rgb(190, 190, 191);
+}
+
+p {
+    margin: 0;
+    font-size: 10px;
+
+    color: red;
+}
