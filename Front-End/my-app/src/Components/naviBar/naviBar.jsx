@@ -2,6 +2,22 @@ import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import "./naviBar.css"
 
+const styles = {
+
+    link: {
+      color: 'green',
+      textDecoration: 'none',
+      fontWeight: 'bold',
+      padding: '5px 10px',
+    },
+    activeLink: {
+      color: 'orange', // 选中高亮色（西瓜红）
+      textDecoration: 'underline',
+      fontWeight: 'bold',
+      padding: '5px 10px',
+    },
+  };
+
 function NavBar ( ) {
 
     return(
@@ -14,8 +30,8 @@ function NavBar ( ) {
                 <NavLink
                     to="/"
                     end
-                    className={({ isActive }) =>
-                    isActive ? 'text-blue-600 font-bold underline' : 'text-gray-700'
+                    style={({ isActive }) =>
+                    isActive ? styles.activeLink : styles.link
                     }
                 >
                     Home
@@ -23,9 +39,9 @@ function NavBar ( ) {
 
                 <NavLink
                     to="/login"
-                    end
-                    className={({ isActive }) =>
-                    isActive ? 'text-blue-600 font-bold underline' : 'text-gray-700'
+                
+                    style={({ isActive }) =>
+                    isActive ? styles.activeLink : styles.link
                     }
                 >
                     Login
@@ -33,9 +49,9 @@ function NavBar ( ) {
 
                 <NavLink
                     to="/signup"
-                    end
-                    className={({ isActive }) =>
-                    isActive ? 'text-blue-600 font-bold underline' : 'text-gray-700'
+                    
+                    style={({ isActive }) =>
+                    isActive ? styles.activeLink : styles.link
                     }
                 >
                     Signup
