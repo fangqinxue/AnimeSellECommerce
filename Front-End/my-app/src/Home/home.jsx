@@ -1,9 +1,14 @@
 import NavBar from "../Components/naviBar/naviBar"
+import FigureCarousel from "../Components/header/header"
 
 function Home () {
 
     return (
-        <NavBar></NavBar>
+        <div>
+                    <NavBar></NavBar>
+                    <FigureCarousel></FigureCarousel>
+        </div>
+
 
     )
 }

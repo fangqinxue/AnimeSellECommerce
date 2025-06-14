@@ -25,7 +25,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//注册了静态资源，可以加载static里面的图片资源了。
+//注册静态资源，比如图片
 app.use('/static', express.static('static'));
 
 
@@ -33,6 +33,7 @@ app.use('/static', express.static('static'));
 // 路由
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/product', require('./routes/product'))
 
 
 const PORT = process.env.PORT ;
