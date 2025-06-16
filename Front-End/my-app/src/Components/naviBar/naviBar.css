@@ -5,9 +5,14 @@
     justify-content: space-between;
     padding:30px 100px;
 
-    background-color: antiquewhite;
+    background-color: rgb(16, 15, 14);
     position: sticky;
+    top: 0; /* 必须指定贴顶 */
+    /* width: 100%; 确保横向撑满 */
     z-index: 2;
+    
+    /* 可选优化 */
+    box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.5); /* 添加底部阴影增强悬浮感 */
 
 
     
@@ -22,7 +27,15 @@
 }
 
 .navbar nav {
+    align-items: center;
     display: flex;
     gap: 1rem;
+
+}
+
+.navbar nav div  {
+    display: flex;
+
+
 
 }

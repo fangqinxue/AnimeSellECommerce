@@ -5,14 +5,14 @@ import "./naviBar.css"
 const styles = {
 
     link: {
-      color: 'green',
+      color: 'white',
       textDecoration: 'none',
       fontWeight: 'bold',
       padding: '5px 10px',
     },
     activeLink: {
-      color: 'orange', // 选中高亮色（西瓜红）
-      textDecoration: 'underline',
+      color: '#E17912', // 选中高亮色（西瓜红）
+      textDecoration: 'none',
       fontWeight: 'bold',
       padding: '5px 10px',
     },
@@ -21,6 +21,7 @@ const styles = {
 function NavBar ( ) {
 
     return(
+        
         <section className='navbar'>
 
             <img src={logo} alt="logo" />
@@ -37,25 +38,30 @@ function NavBar ( ) {
                     Home
                 </NavLink>
 
-                <NavLink
-                    to="/login"
-                
-                    style={({ isActive }) =>
-                    isActive ? styles.activeLink : styles.link
-                    }
-                >
-                    Login
-                </NavLink>
-
-                <NavLink
-                    to="/signup"
+                <div>
+                    <NavLink
+                        to="/login"
                     
-                    style={({ isActive }) =>
-                    isActive ? styles.activeLink : styles.link
-                    }
-                >
-                    Signup
-                </NavLink>
+                        style={({ isActive }) =>
+                        isActive ? styles.activeLink : styles.link
+                        }
+                    >
+                        Login
+                    </NavLink>
+
+                    <NavLink
+                        to="/signup"
+                        
+                        style={({ isActive }) =>
+                        isActive ? styles.activeLink : styles.link
+                        }
+                    >
+                        Signup
+                    </NavLink>
+
+                </div>
+
+
 
             </nav>
 

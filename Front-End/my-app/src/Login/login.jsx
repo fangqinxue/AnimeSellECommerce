@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "../Components/naviBar/naviBar"
+import  "./signup+login.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -70,11 +71,11 @@ const Login = () => {
 
   <>
     <NavBar></NavBar>
-    <div className="">
+    <div className="login">
 
       <h2 className="text-2xl font-bold text-center">登录</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="Form">
         <div>
           <input
             type="email"

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import  "./signup.css";
+import  "./signup+login.css";
 import { Outlet, Link } from "react-router-dom";
 import NavBar from "../Components/naviBar/naviBar"
 
