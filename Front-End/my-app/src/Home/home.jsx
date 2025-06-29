@@ -2,6 +2,7 @@ import NavBar from "../Components/naviBar/naviBar"
 import FigureCarousel from "../Components/header/header"
 import Category from "../Components/header/category"
 import ProductCard from '../Components/ProductCart/productCart';
+import Footer from '../Components/footer/footer'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -39,6 +40,8 @@ function Home () {
                       </div>
 
                     </div>
+
+                    <Footer></Footer>
 
 
 
