@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import pic1 from "../../assets/app.jpg";
 import pic2 from "../../assets/play.jpg";
 import pic3 from "../../assets/pay.png";

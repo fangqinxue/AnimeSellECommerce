@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import "./naviBar.css"
+import "./naviBar.css";
+import { isLoggedIn, logout } from '../../utils/auth';
+import React, { useEffect, useState } from 'react';
 
 const styles = {
 
@@ -19,6 +21,17 @@ const styles = {
   };
 
 function NavBar ( ) {
+    const [loggedIn, setLoggedIn] = useState(false);
+    useEffect(() => {
+        setLoggedIn(isLoggedIn());
+      }, []);
+    
+      const handleLogout = () => {
+        logout();
+        setLoggedIn(false);
+      };
+
+      const user = JSON.parse(localStorage.getItem('user'));
 
     return(
         
@@ -38,28 +51,39 @@ function NavBar ( ) {
                     Home
                 </NavLink>
 
-                <div>
-                    <NavLink
-                        to="/login"
-                    
-                        style={({ isActive }) =>
-                        isActive ? styles.activeLink : styles.link
-                        }
-                    >
-                        Login
-                    </NavLink>
 
-                    <NavLink
-                        to="/signup"
-                        
-                        style={({ isActive }) =>
-                        isActive ? styles.activeLink : styles.link
-                        }
-                    >
-                        Signup
-                    </NavLink>
+                {loggedIn ? (
+                        <div>
+                            <p>{user?.username}</p>
+                            <button onClick={handleLogout}>log out</button>
+                        </div>
+                        ) : (
+                            <div>
+                            <NavLink
+                                to="/login"
+                            
+                                style={({ isActive }) =>
+                                isActive ? styles.activeLink : styles.link
+                                }
+                            >
+                                Login
+                            </NavLink>
+        
+                            <NavLink
+                                to="/signup"
+                                
+                                style={({ isActive }) =>
+                                isActive ? styles.activeLink : styles.link
+                                }
+                            >
+                                Signup
+                            </NavLink>
+        
+                        </div>
 
-                </div>
+                        )}
+
+
 
 
 

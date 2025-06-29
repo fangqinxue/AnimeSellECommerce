@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import  "./signup+login.css";
-import { Outlet, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import NavBar from "../Components/naviBar/naviBar"
 
 
@@ -99,9 +99,9 @@ const signup = () => {
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
+          className=""
         />
-         {<p className="text-red-500 text-sm mt-1">{errors.username}</p>}
+         {<p className="">{errors.username}</p>}
         </div>
 
         <div>
@@ -110,9 +110,9 @@ const signup = () => {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
+          className=""
         />
-        {<p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+        {<p className="">{errors.email}</p>}
 
         </div>
 
@@ -125,7 +125,7 @@ const signup = () => {
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
         />
-          {<p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          {<p className="">{errors.password}</p>}
         </div>
 
 

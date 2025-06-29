@@ -55,6 +55,7 @@ const Login = () => {
 
       // 存储 token（例如 localStorage）
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
 
       // 可重定向或刷新页面
       navigate('/'); 
@@ -71,9 +72,10 @@ const Login = () => {
 
   <>
     <NavBar></NavBar>
+
     <div className="login">
 
-      <h2 className="text-2xl font-bold text-center">登录</h2>
+      <h2 className="title">登录</h2>
 
       <form onSubmit={handleSubmit} className="Form">
         <div>
@@ -83,9 +85,9 @@ const Login = () => {
             placeholder="邮箱"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
+            className=""
           />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          {errors.email && <p className="">{errors.email}</p>}
         </div>
 
         <div>
@@ -95,21 +97,21 @@ const Login = () => {
             placeholder="密码"
             value={formData.password}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
+            className=""
           />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          {errors.password && <p className="">{errors.password}</p>}
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className=""
           disabled={loading}
         >
           {loading ? '登录中...' : '登录'}
         </button>
       </form>
 
-      {message && <p className="text-center text-sm text-blue-600">{message}</p>}
+      {message && <p className="">{message}</p>}
     </div>
     </>
   );

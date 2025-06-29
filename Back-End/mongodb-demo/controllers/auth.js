@@ -55,7 +55,11 @@ exports.login =  async (req, res) => {
     if (!isMatch) return res.status(401).json({ error: '密码错误' });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,{ expiresIn: '2m' });
-    res.status(200).json({ message: '登录成功', token });
+    res.status(200).json({ message: '登录成功', token, user: {
+      id: user._id,
+      username: user.username,
+      email: user.email
+    } });
 
   } catch (err) {
     console.error('捕获的错误:', err);
