@@ -3,8 +3,10 @@ import NavBar from "../Components/naviBar/naviBar"
 import {
     getLocalCart,
     removeFromLocalCart,
+    clearLocalCart
   } from '../utils/cartUtil';
-
+import Footer from '../Components/footer/footer'
+import { isLoggedIn } from "../utils/auth";
 
 function ShopCart () {
 
@@ -16,14 +18,41 @@ function ShopCart () {
     },[])
 
     console.log(ShopcartAll)
+    console.log(localStorage)
 
     const removeItem = (item) => {
         removeFromLocalCart(item)
         setShopcartAll(getLocalCart())
         console.log(ShopcartAll)
-
     }
 
+    const handlePay = () => {
+        if (ShopcartAll.length === 0) {
+          alert("🛒 购物车为空，无法支付！");
+          return;
+        }
+
+        if (isLoggedIn) {
+            const shouldLogin = confirm("🔐 您需要登录后才能支付。现在去登录吗？");
+            if (shouldLogin) {
+                // Redirect to login page
+                window.location.href = '/login';
+                // Or use your routing system
+                return;
+            }
+            return;
+        }
+
+
+
+
+    
+        alert("✅ 支付成功！");
+        clearLocalCart();
+        setShopcartAll([]);
+      };
+
+    const totalPrice = ShopcartAll.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
         <div>
@@ -31,7 +60,7 @@ function ShopCart () {
             <NavBar></NavBar>
 
 
-                <div className="cart">
+                <div className="">
 
                     <h2>Shopping Cart</h2>
 
@@ -63,17 +92,29 @@ function ShopCart () {
                             </div>
                             <button onClick={() => removeItem(item.id)}>❌ 移除</button>
                             </div>
-          ))
-        )}
+                            ))
+                        )}                               
+                </div>
 
-
-
-
+                <div style={{ textAlign: "right", marginTop: "20px" }}>
+                    <p style={{ fontWeight: 'bold' }}>总价：${totalPrice.toFixed(2)}</p>
+                    <button
+                        onClick={handlePay}
+                        style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#4CAF50",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer"
+                        }}
+                    >
+                        💳 去支付
+                    </button>
                 </div>
 
 
-
-
+                <Footer></Footer>
         </div>
         
     )

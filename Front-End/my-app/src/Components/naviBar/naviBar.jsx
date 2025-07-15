@@ -23,9 +23,26 @@ const styles = {
 
 function NavBar ( ) {
     const [loggedIn, setLoggedIn] = useState(false);
+
+
+    // loggedIn 只在 NavBar 组件挂载时检查一次，
+    // 而当你在其他页面点击 logout 时，
+    // NavBar 不会重新检测登录状态，也不会自动刷新。
+    // 使用 useState 存储登录状态，它仅在当前组件中有效，不会响应其他页面触发的 logout()。
     useEffect(() => {
+    const handleStorageChange = () => {
         setLoggedIn(isLoggedIn());
-      }, []);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    handleStorageChange()
+    return () => {
+        window.removeEventListener('storage', handleStorageChange);
+    };
+    
+    }, []);
+
+
     
       const handleLogout = () => {
         logout();
