@@ -3,6 +3,7 @@ import logo from '../../assets/logo.png';
 import "./naviBar.css";
 import { isLoggedIn, logout } from '../../utils/auth';
 import React, { useEffect, useState } from 'react';
+import { FaShoppingCart } from "react-icons/fa";
 
 const styles = {
 
@@ -78,11 +79,19 @@ function NavBar ( ) {
                             >
                                 Signup
                             </NavLink>
-        
                         </div>
+                )}
 
-                        )}
 
+                <NavLink
+                    to="/shopcart"
+                    end
+                    style={({ isActive }) =>
+                    isActive ? styles.activeLink : styles.link
+                    }
+                >
+                    <FaShoppingCart></FaShoppingCart>
+                </NavLink>
 
 
 
