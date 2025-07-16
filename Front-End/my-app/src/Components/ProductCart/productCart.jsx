@@ -15,6 +15,7 @@ const ProductCard = ({ product }) => {
         character: product.character,
         anime: product.anime,
         price: product.price,
+        stock: product.stock,//添加商品的数量
         image: address,      // 添加图片地址
         quantity: 1          // 默认加一件
       });

@@ -3,7 +3,9 @@ import NavBar from "../Components/naviBar/naviBar"
 import {
     getLocalCart,
     removeFromLocalCart,
-    clearLocalCart
+    clearLocalCart,
+    increaseQuantity,
+    decreaseQuantity,
   } from '../utils/cartUtil';
 import Footer from '../Components/footer/footer'
 import { isLoggedIn } from "../utils/auth";
@@ -17,8 +19,6 @@ function ShopCart () {
         setShopcartAll(getLocalCart())
     },[])
 
-    console.log(ShopcartAll)
-    console.log(localStorage)
 
     const removeItem = (item) => {
         removeFromLocalCart(item)
@@ -89,6 +89,25 @@ function ShopCart () {
                                 <p>{item.character} - {item.anime}</p>
                                 <p>价格：${item.price.toFixed(2)}</p>
                                 <p>数量：{item.quantity}</p>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <button onClick={() => {
+                                    decreaseQuantity(item.id);
+                                    setShopcartAll(getLocalCart());
+                                }}>➖</button>
+
+                                <span>{item.quantity}</span>
+
+                                <button onClick={() => {
+                                    const currentItem = ShopcartAll.find(p => p.id === item.id);
+                                    console.log(currentItem.stock)
+                                    if (currentItem.quantity >= currentItem.stock) {
+                                        alert('该商品已达到库存上限');
+                                        return;
+                                    }
+                                    increaseQuantity(item.id);
+                                    setShopcartAll(getLocalCart());
+                                }}>➕</button>
                             </div>
                             <button onClick={() => removeItem(item.id)}>❌ 移除</button>
                             </div>

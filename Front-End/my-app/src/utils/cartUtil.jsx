@@ -33,3 +33,24 @@ export const removeFromLocalCart = (id) => {
 export const clearLocalCart = () => {
   localStorage.removeItem(LOCAL_CART_KEY);
 };
+
+
+// 增加某商品数量
+export const increaseQuantity = (id) => {
+  const cart = getLocalCart();
+  const updatedCart = cart.map(item =>
+    item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+  );
+  setLocalCart(updatedCart);
+};
+
+// 减少某商品数量（不能小于 1）
+export const decreaseQuantity = (id) => {
+  const cart = getLocalCart();
+  const updatedCart = cart.map(item =>
+    item.id === id && item.quantity > 1
+      ? { ...item, quantity: item.quantity - 1 }
+      : item
+  );
+  setLocalCart(updatedCart);
+};
