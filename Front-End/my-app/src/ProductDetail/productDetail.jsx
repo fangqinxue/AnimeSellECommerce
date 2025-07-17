@@ -9,10 +9,21 @@ import { MdAddShoppingCart } from "react-icons/md";
 
 function ProductDetail () {
 
+    const [quantity, setQuantity] = useState(1);
+
+    const increase = () => {
+    if (quantity < product.stock) setQuantity(quantity + 1);
+    };
+
+    const decrease = () => {
+    if (quantity > 1) setQuantity(quantity - 1);
+    };
+
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const tureid = id
+
   
     useEffect(() => {
       axios.post(`http://localhost:3000/api/product/getProductById`,{prod:tureid})
@@ -31,8 +42,22 @@ function ProductDetail () {
     if (!product) return <p>找不到该商品。</p>;
 
     var address = "http://localhost:3000"+product.images[0]
-    
+
+
+
+
     const handleAddToCart = () => {
+        const currentCart = JSON.parse(localStorage.getItem('guest_cart')) || [];
+        const existing = currentCart.find(item => item.id === product._id);
+        const totalDesired = (existing?.quantity || 0) + quantity;
+    
+      
+        if (totalDesired > product.stock) {
+          alert(`❌ 购物车中已经存在导致库存不足，库存只剩 ${product.stock} 件`);
+          return;
+        }
+
+
         addToLocalCart({ 
           id: product._id || product.id, 
           name: product.name,
@@ -41,7 +66,7 @@ function ProductDetail () {
           price: product.price,
           stock: product.stock,//添加商品的数量
           image: address,      // 添加图片地址
-          quantity: 1          // 默认加一件
+          quantity: quantity         // 默认加一件
         });
         alert('✅ 已添加到购物车');
       };
@@ -61,6 +86,12 @@ function ProductDetail () {
                     <p>角色：{product.character}</p>
                     <p>价格：${product.price}</p>
                     <p>库存：{product.stock}</p>
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '10px 0' }}>
+                    <button onClick={decrease} style={{ padding: '5px 10px' }}>-</button>
+                    <span style={{ margin: '0 15px' }}>{quantity}</span>
+                    <button onClick={increase} style={{ padding: '5px 10px' }}>+</button>
+                    </div>
 
                     <button className='shopcartsure' onClick={handleAddToCart}><MdAddShoppingCart /></button>
                 </div>

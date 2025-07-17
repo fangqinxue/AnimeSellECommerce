@@ -9,12 +9,14 @@ import {
   } from '../utils/cartUtil';
 import Footer from '../Components/footer/footer'
 import { isLoggedIn } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 function ShopCart () {
 
     //此处我们用的是react的方法来实现页面的自动刷新，整页刷新可以使用Window.location.reload()
     const [ShopcartAll, setShopcartAll] = useState([])
-    
+    const navigate = useNavigate();
+
     useEffect ( ()=> {
         setShopcartAll(getLocalCart())
     },[])
@@ -23,7 +25,7 @@ function ShopCart () {
     const removeItem = (item) => {
         removeFromLocalCart(item)
         setShopcartAll(getLocalCart())
-        console.log(ShopcartAll)
+
     }
 
     const handlePay = () => {
@@ -32,7 +34,7 @@ function ShopCart () {
           return;
         }
 
-        if (isLoggedIn) {
+        if (!isLoggedIn()) {
             const shouldLogin = confirm("🔐 您需要登录后才能支付。现在去登录吗？");
             if (shouldLogin) {
                 // Redirect to login page
@@ -46,10 +48,10 @@ function ShopCart () {
 
 
 
-    
-        alert("✅ 支付成功！");
-        clearLocalCart();
-        setShopcartAll([]);
+        navigate('/checkout');
+        // alert("✅ 支付成功！");
+        // clearLocalCart();
+        // setShopcartAll([]);
       };
 
     const totalPrice = ShopcartAll.reduce((sum, item) => sum + item.price * item.quantity, 0);
