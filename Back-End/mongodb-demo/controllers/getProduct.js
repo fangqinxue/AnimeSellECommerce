@@ -45,3 +45,28 @@ exports.getProductTags = async(req,res) => {
       }
 
   };
+
+
+  exports.getProductById = async(req, res) => {
+    try {
+      const productId = req.body.prod
+      console.log(req.body)
+  
+      // 检查 ID 格式是否正确
+      if (!productId.match(/^[0-9a-fA-F]{24}$/)) {
+        return res.status(400).json({ message: '无效的商品ID' });
+      }
+  
+      const product = await Figure.find({_id: productId});
+      console.log(product)
+  
+      if (!product) {
+        return res.status(404).json({ message: '商品不存在' });
+      }
+  
+      res.status(200).json(product);
+    } catch (err) {
+      console.error('获取商品出错:', err);
+      res.status(500).json({ message: '服务器错误' });
+    }
+  }
