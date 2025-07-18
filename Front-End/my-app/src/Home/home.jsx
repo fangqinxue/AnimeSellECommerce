@@ -10,6 +10,8 @@ function Home () {
   const [products, setProducts] = useState([]);
   const [expandedFilters, setExpandedFilters] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({});
+  const [sortOption, setSortOption] = useState("default");
+
 
 
 
@@ -47,7 +49,6 @@ const filterOptions = {
 const filters = ["Price", "Availability"];
 
 
-
 const handleFilterChange = (filter, value, checked) => {
   setSelectedFilters(prev => {
     const current = prev[filter] || [];
@@ -77,6 +78,17 @@ const filteredProducts = products.filter(product => {
   return matchPrice && matchAvailability;
 });
 
+const sortedProducts = [...filteredProducts].sort((a, b) => {
+  const priceA = parseFloat(a.price);
+  const priceB = parseFloat(b.price);
+
+  if (sortOption === "priceLowHigh") return priceA - priceB;
+  if (sortOption === "priceHighLow") return priceB - priceA;
+  if (sortOption === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+
+  return 0; // 默认顺序
+});
+
 
     return (
         <div>
@@ -89,6 +101,23 @@ const filteredProducts = products.filter(product => {
 
 
                     <p style={{textAlign:"center",fontSize:"40px"}}>Products</p>
+
+
+                    <div style={styles.sortContainer}>
+                        <label htmlFor="sort" style={{ fontWeight: "bold", marginRight: "10px" }}>Sort by:</label>
+                        <select
+                          id="sort"
+                          value={sortOption}
+                          onChange={(e) => setSortOption(e.target.value)}
+                          style={styles.sortSelect}
+                        >
+                          <option value="default">Default</option>
+                          <option value="priceLowHigh">Price: Low to High</option>
+                          <option value="priceHighLow">Price: High to Low</option>
+                          <option value="newest">Newest</option>
+                        </select>
+                      </div>
+
                     <div style={styles.container}>
                       <aside style={styles.sidebar}>
                         <h3>Filter By:</h3>
@@ -122,7 +151,7 @@ const filteredProducts = products.filter(product => {
 
                         <div style={styles.card}>
 
-                            {filteredProducts.map((pro) => (
+                            {sortedProducts.map((pro) => (
                                 <ProductCard
                                 product={pro}
                                 >
@@ -181,6 +210,18 @@ const styles = {
     filterOptions: {
       paddingLeft: "10px",
       paddingTop: "4px"
+    },
+    sortContainer: {
+      display: "flex",
+      justifyContent: "flex-end",
+      alignItems: "center",
+      marginBottom: "20px",
+      width: "100%"
+    },
+    sortSelect: {
+      padding: "6px",
+      borderRadius: "4px",
+      border: "1px solid #ccc"
     }
 
   };
