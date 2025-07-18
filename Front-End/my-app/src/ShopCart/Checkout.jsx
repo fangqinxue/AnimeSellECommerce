@@ -7,7 +7,7 @@ function Checkout() {
 
   useEffect(() => {
     const buyNowItem = JSON.parse(localStorage.getItem('guest_cart')) || [];
-
+    
     
     setItem(buyNowItem);
 
@@ -26,12 +26,13 @@ function Checkout() {
       
       <div style={{ textAlign: 'center', padding: '20px' }}>
         <h2>订单确认</h2>
-        {/* <img src={item.image} alt={item.name} style={{ width: '200px' }} /> */}
+        
 
 
         
             {item.map((product) => (
             <div key={product.id} style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
+                <img src={product.image} alt={product.name} style={{ width: '200px' }} />
                 <p>{product.name}</p>
                 <p>数量：{product.quantity}</p>
                 <p>单价：${product.price}</p>
