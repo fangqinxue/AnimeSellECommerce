@@ -19,10 +19,37 @@ const styles = {
       fontWeight: 'bold',
       padding: '5px 10px',
     },
+    search: {
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+      },
+      searchInput: {
+        width: "250px",
+        padding: "6px 10px",
+        borderRadius: "4px",
+        border: "1px solid #ccc",
+      },
+      searchButton: {
+        padding: "6px 12px",
+        borderRadius: "4px",
+        border: "none",
+        backgroundColor: "#E17912",
+        color: "white",
+        cursor: "pointer",
+        fontWeight: 'bold'
+      },
   };
 
-function NavBar ( ) {
+function NavBar ({ onSearchSubmit }) {
     const [loggedIn, setLoggedIn] = useState(false);
+    const [input, setInput] = useState("");
+
+    const handleSearch = () => {
+        onSearchSubmit(input);  // 传给父组件（Home.jsx）
+      };
+    
+
 
 
     // loggedIn 只在 NavBar 组件挂载时检查一次，
@@ -56,6 +83,18 @@ function NavBar ( ) {
         <section className='navbar'>
 
             <img src={logo} alt="logo" />
+
+            <div style={styles.search}>
+                <input
+                type="text"
+                placeholder="Search products..."
+                onChange={(e) =>setInput(e.target.value)}
+                style={styles.searchInput}
+                />
+                <button onClick={handleSearch} style={styles.searchButton}>
+                Search
+                </button>
+            </div>
 
 
             <nav>

@@ -11,6 +11,7 @@ function Home () {
   const [expandedFilters, setExpandedFilters] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [sortOption, setSortOption] = useState("default");
+  const [searchQuery, setSearchQuery] = useState(""); // 实际被“提交”搜索的内容
 
 
 
@@ -75,7 +76,13 @@ const filteredProducts = products.filter(product => {
   const matchAvailability = !selectedFilters.Availability || selectedFilters.Availability.length === 0 ||
     selectedFilters.Availability.includes(product.availability); // 确保 product 有这个字段
 
-  return matchPrice && matchAvailability;
+
+    const matchSearch =
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
+
+
+  return matchPrice && matchAvailability && matchSearch;
 });
 
 const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -84,7 +91,7 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
 
   if (sortOption === "priceLowHigh") return priceA - priceB;
   if (sortOption === "priceHighLow") return priceB - priceA;
-  if (sortOption === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+  if (sortOption === "newest") return new Date(b.release_date) - new Date(a.release_date);
 
   return 0; // 默认顺序
 });
@@ -92,7 +99,7 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
 
     return (
         <div>
-                    <NavBar></NavBar>
+                    <NavBar onSearchSubmit={setSearchQuery}></NavBar>
                     <div style={styles.header}>
                         <Category></Category>
                         <FigureCarousel></FigureCarousel>
@@ -100,7 +107,9 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
                     </div>
 
 
-                    <p style={{textAlign:"center",fontSize:"40px"}}>Products</p>
+                    <p style={{ textAlign: "center", fontSize: "40px" }}>
+                      {searchQuery ? `Search results for: "${searchQuery}"` : "Products"}
+                    </p>
 
 
                     <div style={styles.sortContainer}>

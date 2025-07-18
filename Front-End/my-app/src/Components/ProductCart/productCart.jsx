@@ -8,9 +8,6 @@ const ProductCard = ({ product }) => {
 
     var address = "http://localhost:3000"+product.images[0]
 
-
-
-
     const alink= "/productdetail/" + product._id
 
 
