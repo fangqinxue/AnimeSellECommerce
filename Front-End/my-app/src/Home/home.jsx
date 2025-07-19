@@ -159,14 +159,15 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
 
 
                         <div style={styles.card}>
-
-                            {sortedProducts.map((pro) => (
-                                <ProductCard
-                                product={pro}
-                                >
-                                </ProductCard>
-                            ))}
-
+                          {sortedProducts.length > 0 ? (
+                            sortedProducts.map((pro) => (
+                              <ProductCard key={pro._id} product={pro} />
+                            ))
+                          ) : (
+                            <p style={styles.noResult}>
+                              No products found{searchQuery && ` for "${searchQuery}"`}!
+                            </p>
+                          )}
                         </div>
 
                     </div>
@@ -231,6 +232,13 @@ const styles = {
       padding: "6px",
       borderRadius: "4px",
       border: "1px solid #ccc"
+    },
+    noResult: {
+      fontSize: "18px",
+      color: "#999",
+      textAlign: "center",
+      width: "100%",
+      marginTop: "50px"
     }
 
   };

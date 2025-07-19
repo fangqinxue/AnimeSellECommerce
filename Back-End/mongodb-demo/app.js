@@ -24,6 +24,8 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
 //注册静态资源，比如图片
 app.use('/static', express.static('static'));
@@ -34,6 +36,7 @@ app.use('/static', express.static('static'));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/product', require('./routes/product'))
+app.use('/api/order',require('./routes/order'))
 
 
 const PORT = process.env.PORT ;
