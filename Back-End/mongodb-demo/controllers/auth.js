@@ -67,3 +67,75 @@ exports.login =  async (req, res) => {
   }
 
 }
+
+exports.changeUsername =  async (req, res) => {
+
+  const { email, newUsername } = req.body;
+
+  if (!email || !newUsername) {
+    return res.status(400).json({ success: false, message: '缺少必要参数' });
+  }
+
+
+            // 检查是否有重复用户名
+  const existingUser = await User.findOne({ username: newUsername });
+  if (existingUser) {
+    return res.status(400).json({ message: '用户名已被占用，请换一个' });
+  }
+
+
+  try {
+
+
+    
+    const user = await User.findOneAndUpdate(
+      { email },
+      { username: newUsername },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: '用户未找到' });
+    }
+
+    res.json({ success: true, message: '用户名更新成功', user });
+  } catch (error) {
+    console.error('更新用户名失败:', error);
+    res.status(500).json({ success: false, message: '服务器错误' });
+  }
+}
+
+exports.changePassword =  async (req, res) => {
+
+  const { email, currentPassword, newPassword } = req.body;
+
+  if (!email || !currentPassword || !newPassword) {
+    return res.status(400).json({ success: false, message: '缺少必要参数' });
+  }
+
+ 
+
+  try {
+    const user = await User.findOne({ email }).select('+password');;
+
+    if (!user) return res.status(404).json({ success: false, message: '用户不存在' });
+    console.log(user)
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: '当前密码错误' });
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed;
+
+    await user.save();
+
+    res.json({ success: true, message: '密码更新成功' });
+  } catch (error) {
+    console.error('密码更新失败:', error);
+    res.status(500).json({ success: false, message: '服务器错误' });
+  }
+
+}

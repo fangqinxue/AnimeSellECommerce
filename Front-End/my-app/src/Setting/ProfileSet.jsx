@@ -2,11 +2,70 @@
 import NavBar from '../Components/naviBar/naviBar';
 import Footer from '../Components/footer/footer';
 import { useState } from 'react';
+import axios from 'axios';
 
 function ProfileSetting () {
     const [selectedSetting, setSelectedSetting] = useState(null); // 当前选中的设置项
     const [username, setUsername] = useState('');
     const [passwords, setPasswords] = useState({ current: '', new: '' });
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const handleUsernameChange = async () => {
+      if (!username.trim()) {
+        alert("❗用户名不能为空");
+        return;
+      }
+      try {
+        const res = await axios.put('http://localhost:3000/api/auth/changeUsername', {
+          email: user.email,
+          newUsername: username,
+        });
+
+       
+        alert('✅ 用户名更新成功');
+        // 更新本地存储
+        const updatedUser = { ...user, username };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      } catch (err) {
+        console.error('更新用户名失败', err);
+        const errorMessage = err.response.data.message
+
+        alert(errorMessage)
+      }
+    };
+  
+    const handlePasswordChange = async () => {
+      if (!passwords.current || !passwords.new) {
+        alert("❗请填写所有字段");
+        return;
+      }
+      if (passwords.new.length < 6) {
+        alert("❗新密码长度至少为 6 位");
+        return;
+      }
+
+      if (passwords.current === passwords.new) {
+        alert("❗新密码不能与当前密码相同");
+        return;
+      }
+      
+      try {
+        const res = await axios.put('http://localhost:3000/api/auth/changePassword', {
+          email: user.email,
+          currentPassword: passwords.current,
+          newPassword: passwords.new,
+        });
+
+        alert('✅ 密码更新成功');
+        setPasswords({ current: '', new: '' });
+      } catch (err) {
+        console.error('更新密码失败', err);
+        const errorMessage = err.response.data.message
+
+        alert(errorMessage)
+      }
+    };
 
     const renderContent = () => {
         switch (selectedSetting) {
@@ -21,7 +80,7 @@ function ProfileSetting () {
                   onChange={(e) => setUsername(e.target.value)}
                   style={style.input}
                 />
-                <button style={style.button}>保存用户名</button>
+                <button onClick={handleUsernameChange} style={style.button}>保存用户名</button>
               </div>
             );
           case 'password':
@@ -42,7 +101,7 @@ function ProfileSetting () {
                   onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
                   style={style.input}
                 />
-                <button style={style.button}>更新密码</button>
+                <button onClick={handlePasswordChange} style={style.button}>更新密码</button>
               </div>
             );
           default:
