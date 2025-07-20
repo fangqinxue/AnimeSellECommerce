@@ -110,3 +110,20 @@ exports.createOrder = async (req, res) => {
 //       res.status(500).json({ success: false, message: error.message });
 //     }
 //   }
+
+
+exports.getMyOrders = async (req, res) => {
+ 
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ success: false, message: '缺少用户邮箱' });
+
+    try {
+      const orders = await Order.find({ userEmail: email }).sort({ createdAt: -1 });
+      res.json({ success: true, orders });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ success: false, message: '服务器错误' });
+    }
+
+
+};

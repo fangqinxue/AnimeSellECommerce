@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import "./naviBar.css";
 import { isLoggedIn, logout } from '../../utils/auth';
@@ -40,10 +40,21 @@ const styles = {
         fontWeight: 'bold'
       },
   };
+  const dropdownItemStyle = {
+    display: 'block',
+    padding: '10px 15px',
+    textDecoration: 'none',
+    color: '#333',
+    backgroundColor: '#fff',
+    borderBottom: '1px solid #eee',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap'
+  };
 
 function NavBar ({ onSearchSubmit }) {
     const [loggedIn, setLoggedIn] = useState(false);
     const [input, setInput] = useState("");
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const handleSearch = () => {
         onSearchSubmit(input);  // 传给父组件（Home.jsx）
@@ -89,6 +100,11 @@ function NavBar ({ onSearchSubmit }) {
                 type="text"
                 placeholder="Search products..."
                 onChange={(e) =>setInput(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch(); // 按 Enter 时触发搜索
+                    }
+                  }}
                 style={styles.searchInput}
                 />
                 <button onClick={handleSearch} style={styles.searchButton}>
@@ -110,11 +126,39 @@ function NavBar ({ onSearchSubmit }) {
 
 
                 {loggedIn ? (
-                        <div>
-                            <p>{user?.username}</p>
-                            <button onClick={handleLogout}>log out</button>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <button
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        >
+                        👋 {user?.username} ▾
+                        </button>
+
+                        {dropdownOpen && (
+                        <div style={{
+                            position: 'absolute',
+                            right: 0,
+                            top: '100%',
+                            background: '#fff',
+                            boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+                            borderRadius: '6px',
+                            overflow: 'hidden',
+                            zIndex: 999
+                        }}>
+                            <NavLink to="/profile" style={dropdownItemStyle}>👤 个人资料</NavLink>
+                            <NavLink to="/orders" style={dropdownItemStyle}>📦 我的订单</NavLink>
+                            <NavLink to="/settings" style={dropdownItemStyle}>⚙️ 设置</NavLink>
+                            <div onClick={handleLogout} style={dropdownItemStyle}>🚪 登出</div>
                         </div>
-                        ) : (
+                        )}
+                    </div>
+                    ) : (
                             <div>
                             <NavLink
                                 to="/login"

@@ -6,7 +6,11 @@ import Home from "./Home/home";
 import ShopCart from "./ShopCart/ShopCart";
 import ProductDetail from "./ProductDetail/productDetail";
 import Checkout from "./ShopCart/Checkout";
-
+import UserProfile from "./UserProfile/userProfile";
+import Orders from "./Orders/MyOrder";
+import Settings from "./Setting/Setting";
+import AddressSetting from "./Setting/AddressSet";
+import ProfileSetting from "./Setting/ProfileSet";
 
 function App() {
 
@@ -20,6 +24,11 @@ function App() {
         <Route path="/shopcart" element={<ShopCart />}></Route>
         <Route path="/productdetail/:id" element={<ProductDetail />}></Route>
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/addressSetting" element={<AddressSetting />} />
+        <Route path="/profileSetting" element={<ProfileSetting />} />
 
 
       </Routes>
