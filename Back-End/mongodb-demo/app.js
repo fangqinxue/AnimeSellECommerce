@@ -37,6 +37,7 @@ app.use('/static', express.static('static'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/product', require('./routes/product'))
 app.use('/api/order',require('./routes/order'))
+app.use('/api/address',require('./routes/address'))
 
 
 const PORT = process.env.PORT ;

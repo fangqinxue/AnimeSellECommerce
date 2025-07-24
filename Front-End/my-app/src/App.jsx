@@ -11,6 +11,7 @@ import Orders from "./Orders/MyOrder";
 import Settings from "./Setting/Setting";
 import AddressSetting from "./Setting/AddressSet";
 import ProfileSetting from "./Setting/ProfileSet";
+import AddressEdit from "./Components/form/addressEdit";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/addressSetting" element={<AddressSetting />} />
         <Route path="/profileSetting" element={<ProfileSetting />} />
+        <Route path="/addressEdit" element={<AddressEdit />} />
 
 
       </Routes>
