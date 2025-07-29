@@ -17,7 +17,10 @@ const ProductSchema = new mongoose.Schema({
     depth_cm: Number
   },
   manufacturer: String,
-  available: { type: Boolean, default: true }
+  available: { type: Boolean, default: true },
+
+    // 新增的商家字段（方式二，引用商家）
+  seller: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', required: true }
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

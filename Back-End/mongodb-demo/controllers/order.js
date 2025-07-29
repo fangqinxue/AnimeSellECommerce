@@ -8,7 +8,7 @@ exports.createOrder = async (req, res) => {
 
 
     try {
-        const { items, total, userEmail, createdAt } = req.body;
+        const { items, shippingAddress, total, userEmail, createdAt } = req.body;
 
             // 1. 验证所有商品库存是否足够
             for (const item of items) {
@@ -30,6 +30,7 @@ exports.createOrder = async (req, res) => {
           userEmail,
           items,
           total,
+          shippingAddress,
           createdAt: createdAt || new Date()
         });
     

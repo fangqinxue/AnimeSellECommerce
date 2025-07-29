@@ -1,4 +1,4 @@
-import { NavLink, Navigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import "./naviBar.css";
 import { isLoggedIn, logout } from '../../utils/auth';
@@ -39,6 +39,13 @@ const styles = {
         cursor: "pointer",
         fontWeight: 'bold'
       },
+      seller:{
+        padding:"2px 2px",
+        width:"60px",
+        fontSize: "12px",
+        cursor:"pointer"
+
+      }
   };
   const dropdownItemStyle = {
     display: 'block',
@@ -60,7 +67,7 @@ function NavBar ({ onSearchSubmit }) {
         onSearchSubmit(input);  // 传给父组件（Home.jsx）
       };
     
-
+      const Navigate = useNavigate();
 
 
     // loggedIn 只在 NavBar 组件挂载时检查一次，
@@ -94,6 +101,10 @@ function NavBar ({ onSearchSubmit }) {
         <section className='navbar'>
 
             <img src={logo} alt="logo" />
+
+            <div>
+                <button onClick={() => Navigate("/sellerLogin")} style={styles.seller}>卖家中心</button>
+            </div>
 
             <div style={styles.search}>
                 <input

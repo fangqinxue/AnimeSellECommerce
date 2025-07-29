@@ -2,7 +2,7 @@ const Address = require('../models/AddressUser');
 
 exports.addAddress = async (req, res) => {
   try {
-    const { email, recipientName, phoneNumber, province, city, district, detail, postalCode, isDefault } = req.body;
+    const { email, recipientName, phoneNumber, province, city, district, detail, postalCode, isDefault, lat,lng } = req.body;
 
     if (isDefault) {
       await Address.updateMany({ email }, { isDefault: false });
@@ -17,7 +17,9 @@ exports.addAddress = async (req, res) => {
       district,
       detail,
       postalCode,
-      isDefault
+      isDefault,
+      lat,
+      lng
     });
 
     res.status(201).json({ success: true, address });

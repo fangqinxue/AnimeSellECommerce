@@ -40,6 +40,12 @@ const addressSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  lat: {
+    type: Number
+  },
+  lng: {
+    type: Number
   }
 });
 

@@ -38,6 +38,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/product', require('./routes/product'))
 app.use('/api/order',require('./routes/order'))
 app.use('/api/address',require('./routes/address'))
+app.use('/api/seller', require('./routes/SellerAuth'))
 
 
 const PORT = process.env.PORT ;

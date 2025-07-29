@@ -2,6 +2,17 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
   userEmail: { type: String, required: true },
+  shippingAddress: {
+    recipientName: String,
+    phoneNumber: String,
+    province: String,
+    city: String,
+    district: String,
+    detail: String,
+    postalCode: String,
+    lat: Number,
+    lng: Number
+  },
   items: [
     {
       id: String,
@@ -10,7 +21,12 @@ const orderSchema = new mongoose.Schema({
       anime: String,
       price: Number,
       quantity: Number,
-      image: String
+      image: String,
+      seller: {               // 添加商家引用
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Seller',
+        required: true
+      }
     }
   ],
   total: Number,

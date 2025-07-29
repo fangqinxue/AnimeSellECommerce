@@ -12,6 +12,9 @@ import Settings from "./Setting/Setting";
 import AddressSetting from "./Setting/AddressSet";
 import ProfileSetting from "./Setting/ProfileSet";
 import AddressEdit from "./Components/form/addressEdit";
+import SellerLogin from "./Seller/SellerLogin";
+import SellerRegister from "./Seller/SellerRegister";
+import SellerDashboard from "./Seller/SellerDashboard";
 
 function App() {
 
@@ -31,6 +34,9 @@ function App() {
         <Route path="/addressSetting" element={<AddressSetting />} />
         <Route path="/profileSetting" element={<ProfileSetting />} />
         <Route path="/addressEdit" element={<AddressEdit />} />
+        <Route path="/sellerLogin" element={<SellerLogin></SellerLogin>}></Route>
+        <Route path="/sellerRegister" element={<SellerRegister></SellerRegister>}></Route>
+        <Route path="/seller/dashboard" element={<SellerDashboard></SellerDashboard>}></Route>
 
 
       </Routes>

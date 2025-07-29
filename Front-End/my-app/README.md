@@ -17,3 +17,5 @@ add baidu React-BMapGl (JS API)
 ## how to run the web program
 cd my-app : npm run dev
 http://localhost:5173/
+
+for run the react BMapGl successfully, I have to install the tslib
