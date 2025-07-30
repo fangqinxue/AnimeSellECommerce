@@ -64,7 +64,9 @@ function ProductDetail () {
           character: product.character,
           anime: product.anime,
           price: product.price,
+          seller: product.seller,
           stock: product.stock,//添加商品的数量
+
           image: address,      // 添加图片地址
           quantity: quantity         // 默认加一件
         });

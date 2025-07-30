@@ -25,8 +25,9 @@ function Home () {
         ...product,
         availability: product.available ? "In Stock" : "Sold Out"
       }));
-      console.log(enriched)
+      
       setProducts(enriched)
+      console.log(enriched)
     }
   
   )

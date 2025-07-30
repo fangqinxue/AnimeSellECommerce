@@ -10,12 +10,19 @@ import {
 import Footer from '../Components/footer/footer'
 import { isLoggedIn } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function ShopCart () {
+
+    const [showAddressModal, setShowAddressModal] = useState(false);
+    const [addressList, setAddressList] = useState([]);
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
 
     //此处我们用的是react的方法来实现页面的自动刷新，整页刷新可以使用Window.location.reload()
     const [ShopcartAll, setShopcartAll] = useState([])
     const navigate = useNavigate();
+
+    const username = JSON.parse(localStorage.getItem('user'));
 
     useEffect ( ()=> {
         setShopcartAll(getLocalCart())
@@ -28,7 +35,7 @@ function ShopCart () {
 
     }
 
-    const handlePay = () => {
+    const handlePay = async() => {
         if (ShopcartAll.length === 0) {
           alert("🛒 购物车为空，无法支付！");
           return;
@@ -45,13 +52,30 @@ function ShopCart () {
             return;
         }
 
+        try {
+            const email = username.email // 你也可以从 localStorage 或 state 中获取
+            const res = await axios.get(`http://localhost:3000/api/address/getUserAddresses`, {
+              params: { email }
+            });
+
+              console.log(res.data)
+            setAddressList(res.data.addresses || []);
+
+            console.log(addressList)
+            if (res.data.addresses.length > 0) {
+              setSelectedAddressId(res.data.addresses[0].id);
+            }
+            setShowAddressModal(true);
+          } catch (err) {
+            alert('获取地址失败：' + (err.response?.data?.message || err.message));
+          }
 
 
 
-        navigate('/checkout');
-        // alert("✅ 支付成功！");
-        // clearLocalCart();
-        // setShopcartAll([]);
+        // navigate('/checkout');
+        // // alert("✅ 支付成功！");
+        // // clearLocalCart();
+        // // setShopcartAll([]);
       };
 
     const totalPrice = ShopcartAll.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -133,6 +157,71 @@ function ShopCart () {
                         💳 去支付
                     </button>
                 </div>
+
+
+
+                    {showAddressModal && (
+                        <div style={{
+                            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            display: 'flex', justifyContent: 'center', alignItems: 'center',
+                            zIndex: 1000
+                        }}>
+                        <div style={{
+                            background: '#fff', padding: '20px', borderRadius: '8px',
+                            width: '400px', maxHeight: '90vh', overflowY: 'auto'
+                        }}>
+                        <div  style={{display:'flex',justifyContent:'space-between'
+                        }}>
+                            <h3>选择收货地址</h3>
+                            <button>+ 新增地址</button>
+                        </div>
+
+
+
+                        {addressList.length === 0 ? (
+                            <p>暂无地址，请添加一个 👇</p>
+                            ) : (
+                                    <select
+                                    value={selectedAddressId}
+                                    onChange={(e) => setSelectedAddressId(e.target.value)}
+                                    style={{ width: '100%', marginBottom: '10px',height:"30px" }}
+                                    >
+                                    {addressList.map((addr) => (
+                                        <option key={addr._id} value={addr._id}>
+                                            {addr.detail}（{addr.recipientName} / {addr.phoneNumber}）
+                                        </option>
+                                    ))}
+                                    </select>
+                                )}
+
+
+                    
+
+
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <button onClick={() => setShowAddressModal(false)}>取消</button>
+                    <button
+                        onClick={() => {
+                            if (!selectedAddressId) {
+                                alert('请选择地址');
+                                return;
+                            }
+                            localStorage.setItem('selectedAddressId', selectedAddressId);
+
+
+                            setShowAddressModal(false);
+                            navigate('/checkout');
+                        }}
+                    >
+                    确认地址并支付 →
+                    </button>
+                    </div>
+                    </div>
+                    </div>
+                    )}
+
 
 
                 <Footer></Footer>

@@ -19,8 +19,6 @@ const category = () => {
         .catch(err => console.log(err))
     },[])
 
-    console.log(anime)
-    console.log(tags)
 
 
 

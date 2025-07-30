@@ -12,6 +12,7 @@ router.get('/getUserAddresses', addressUse.getUserAddresses);
 router.post('/updateAddress/:addressId', addressUse.updateAddress);
 router.delete('/deleteAddress/:addressId', addressUse.deleteAddress);
 router.put('/setDefault/:addressId', addressUse.setDefaultAddress);
+router.get('/getAddressById', addressUse.getAddressById)
 
 
 

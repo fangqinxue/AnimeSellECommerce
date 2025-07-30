@@ -24,7 +24,7 @@ const FigureCarousel = () => {
   if (figures.length === 0) return <div>加载中...</div>;
 
   const figure = figures[currentIndex];
-  console.log (figure.images[0])
+
   const imgs = "http://localhost:3000"+figure.images[0]
 
   return (

@@ -50,7 +50,7 @@ const Footer = () => {
                         <div className="footer1">
                             <h4>Install App</h4>
                             <p>From App Store or Google Play</p>
-                            <div class="row">
+                            <div className="row">
                                 <img src={pic1} alt="" />
                                 <img src={pic2} alt="" />
                             </div>

@@ -93,3 +93,25 @@ exports.setDefaultAddress = async (req, res) => {
       res.status(500).json({ success: false, message: '服务器错误' });
     }
   };
+
+
+  exports.getAddressById =  async (req,res) => {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(400).json({ success: false, message: '地址ID不能为空' });
+    }
+
+    try {
+      const address = await Address.findById(id);
+
+      if (!address) {
+        return res.status(404).json({ success: false, message: '地址未找到' });
+      }
+
+      res.json({ success: true, address });
+    } catch (err) {
+      console.error('查找地址出错:', err);
+      res.status(500).json({ success: false, message: '服务器错误' });
+    }
+  }
