@@ -26,8 +26,14 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Seller',
         required: true
+      },
+      logisticsStatus: {
+        type: String,
+        enum: ['待发货', '运输中', '已签收', '退货中', '已退货'],
+        default: '待发货'
       }
     }
+
   ],
   total: Number,
   createdAt: { type: Date, default: Date.now }
