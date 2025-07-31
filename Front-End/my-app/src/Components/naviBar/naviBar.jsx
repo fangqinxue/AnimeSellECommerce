@@ -2,8 +2,9 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import "./naviBar.css";
 import { isLoggedIn, logout } from '../../utils/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { FaShoppingCart } from "react-icons/fa";
+
 
 const styles = {
 
@@ -44,24 +45,67 @@ const styles = {
         width:"60px",
         fontSize: "12px",
         cursor:"pointer"
+      },
+      dropdownItem: {
+        display: 'block',
+        padding: '10px 15px',
+        textDecoration: 'none',
+        color: 'white',
+        backgroundColor: 'black',
+        borderBottom: '1px solid #eee',
+        cursor: 'pointer',
+        whiteSpace: 'nowrap'
 
-      }
+      },
+      dropdownMenu:{
+        display: "flex",
+        flexDirection: "column",
+        position: 'absolute',
+        right: -55,
+        top: '120%',
+        background: '#fff',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        borderRadius: '10px',
+        overflow: 'hidden',
+        zIndex: 999,
+        minWidth: '160px',
+        animation: 'fadeIn 0.2s ease-in-out'
+      },
+
   };
   const dropdownItemStyle = {
-    display: 'block',
-    padding: '10px 15px',
-    textDecoration: 'none',
-    color: '#333',
-    backgroundColor: '#fff',
-    borderBottom: '1px solid #eee',
-    cursor: 'pointer',
-    whiteSpace: 'nowrap'
+
   };
 
+
 function NavBar ({ onSearchSubmit }) {
+
+  const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [input, setInput] = useState("");
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target) &&
+          buttonRef.current &&
+          !buttonRef.current.contains(event.target)
+        ) {
+          setDropdownOpen(false);
+        }
+      };
+    
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+
 
     const handleSearch = () => {
         onSearchSubmit(input);  // 传给父组件（Home.jsx）
@@ -137,9 +181,25 @@ function NavBar ({ onSearchSubmit }) {
 
 
                 {loggedIn ? (
-                    <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <button
+                    <div style={{ 
+                      width: '50px',
+                      height: '50px',
+                      position: 'relative',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #E17912, #f8b26a)',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      // fontSize: '18px',
+                      cursor: 'pointer',
+                      transition: 'box-shadow 0.3s, transform 0.3s',
+                      boxShadow: dropdownOpen ? '0 0 10px rgba(255, 193, 7, 0.7)' : 'none'}}>
+                        <button 
+                        ref={buttonRef}
                         style={{
+                            // fontSize:"5px",
                             background: 'none',
                             border: 'none',
                             color: 'white',
@@ -148,24 +208,19 @@ function NavBar ({ onSearchSubmit }) {
                         }}
                         onClick={() => setDropdownOpen(!dropdownOpen)}
                         >
-                        👋 {user?.username} ▾
+                        {user?.username} 
                         </button>
 
                         {dropdownOpen && (
-                        <div style={{
-                            position: 'absolute',
-                            right: 0,
-                            top: '100%',
-                            background: '#fff',
-                            boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
-                            borderRadius: '6px',
-                            overflow: 'hidden',
-                            zIndex: 999
-                        }}>
-                            <NavLink to="/profile" style={dropdownItemStyle}>👤 个人资料</NavLink>
-                            <NavLink to="/orders" style={dropdownItemStyle}>📦 我的订单</NavLink>
-                            <NavLink to="/settings" style={dropdownItemStyle}>⚙️ 设置</NavLink>
-                            <div onClick={handleLogout} style={dropdownItemStyle}>🚪 登出</div>
+                        <div 
+                        ref={dropdownRef}
+                        className="dropdownMenu"
+                        style={styles.dropdownMenu
+                          }>
+                            <NavLink to="/profile" className="dropdownItem" style={styles.dropdownItem}>👤 个人资料</NavLink>
+                            <NavLink to="/orders" className="dropdownItem" style={styles.dropdownItem}>📦 我的订单</NavLink>
+                            <NavLink to="/settings" className="dropdownItem" style={styles.dropdownItem}>⚙️ 设置</NavLink>
+                            <div onClick={handleLogout} className="dropdownItem" style={styles.dropdownItem}>🚪 登出</div>
                         </div>
                         )}
                     </div>

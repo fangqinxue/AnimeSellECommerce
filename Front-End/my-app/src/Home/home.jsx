@@ -5,6 +5,7 @@ import ProductCard from '../Components/ProductCart/productCart';
 import Footer from '../Components/footer/footer'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { MdBorderBottom } from "react-icons/md";
 
 function Home () {
   const [products, setProducts] = useState([]);
@@ -130,18 +131,31 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
 
                     <div style={styles.container}>
                       <aside style={styles.sidebar}>
-                        <h3>Filter By:</h3>
+                        <h3 style={{textAlign:"left", fontSize:"30px", paddingBottom:'20px',borderBottom:'1px solid black'}}>Filter By:</h3>
                         {filters.map(filter => (
                           <div key={filter} style={{ marginBottom: "10px" }}>
-                            <button onClick={() => toggleFilter(filter)} style={styles.filterButton}>
-                              {filter} {expandedFilters.includes(filter) ? '−' : '+'}
+                            <button onClick={() => toggleFilter(filter)} style={{
+                            ...styles.filterButton,
+                            borderBottom: expandedFilters.includes(filter) ? "none" : "1px solid black",
+                            marginBottom: expandedFilters.includes(filter) ? "0" : "30px",
+
+                            }}>
+                              <div style={{display:'flex', justifyContent:'space-between'}}>
+                                <div>{filter} </div>
+                                <div>{expandedFilters.includes(filter) ? '−' : '+'}</div>
+                                </div>                 
                             </button>
                             {expandedFilters.includes(filter) && (
                                 <div style={styles.filterOptions}>
                                   {(filterOptions[filter] || []).map((option) => (
-                                    <label key={option} style={{ display: 'flex', fontSize: '15px',justifyContent:"center", alignItems:'center'}}>
+                                    <label key={option} style={{ 
+                                    display: 'flex', 
+                                    justifyContent:"left", 
+                                    alignItems:'center',
+                                    fontSize: '18px'
+                                    }}>
                                       <input
-                                        style={{width:"20px"}}
+                                        style={{ width:"20px"}}
                                         type="checkbox"
                                         value={option}
                                         onChange={(e) => handleFilterChange(filter, option, e.target.checked)}
@@ -190,11 +204,10 @@ const styles = {
     },
     card: {
 
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: "30px", // 推荐加这个，替代你之前卡片的 margin
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)", // 每行 4 个
+        gap: "30px", // 卡片之间间距
+        flexGrow: 1,
 
           
     },
@@ -203,25 +216,36 @@ const styles = {
       textAlign:"center",
       margin: "0 auto",
       padding: "0 20px",
-      width:"80%",
+      width:"100%",
     },
     sidebar: {
-      width: "200px",
-      marginRight: "30px",
+      width: "300px",
+      minWidth: "200px",
+      marginRight: "70px",
+      marginLeft:'60px'
+      
     },
     filterButton: {
+      border:"none",
+      borderRadius: "0",
+      padding: "0",
+      paddingBottom:'50px',
+      background: "none",
       width: "100%",
       textAlign: "left",
-      padding: "8px",
-      border: "1px solid #ccc",
-      backgroundColor: "#f5f5f5",
-      borderRadius: "4px",
-      cursor: "pointer"
+ 
+      backgroundColor: 'white',
+      cursor: "pointer",
+      marginLeft:'0',
+      fontSize:'20px',
+
     },
-    filterOptions: {
-      paddingLeft: "10px",
-      paddingTop: "4px"
-    },
+
+
+    // filterOptions: {
+
+    // },
+
     sortContainer: {
       display: "flex",
       justifyContent: "flex-end",

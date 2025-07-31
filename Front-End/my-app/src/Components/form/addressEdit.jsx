@@ -15,6 +15,26 @@ function AddressEdit() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
   const isEdit = Boolean(state);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   
 
   const defaultForm = {
@@ -94,7 +114,13 @@ function AddressEdit() {
         <input name="city" placeholder="城市" value={form.city || ''} onChange={handleChange} style={styles.input} />
         <input name="district" placeholder="区县" value={form.district || ''} onChange={handleChange} style={styles.input} />
 
-        <PlaceSearchInput name="detail" cityName= {form.city} onChange={(val) => setForm(prev => ({ ...prev, detail: val }))} valueOld={form.detail || ''} inputStyle={styles.input}  onSelect={(poi) => {
+        <PlaceSearchInput 
+          name="detail" 
+          cityName= {form.city} 
+          onChange={(val) => setForm(prev => ({ ...prev, detail: val }))} 
+          valueOld={form.detail || ''} 
+          inputStyle={styles.input}  
+          onSelect={(poi) => {
             setForm(prev => ({
                 ...prev,
                 postalCode: poi.postcode,
