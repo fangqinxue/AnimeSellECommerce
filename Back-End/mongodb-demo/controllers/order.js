@@ -128,3 +128,28 @@ exports.getMyOrders = async (req, res) => {
 
 
 };
+
+
+exports.requestRefund = async(req,res) => {
+  const { orderId, itemId } = req.body;
+
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ success: false, message: '订单不存在' });
+
+    const item = order.items.id(itemId);
+    if (!item) return res.status(404).json({ success: false, message: '商品不存在' });
+
+    if (['退货中', '已退货'].includes(item.logisticsStatus)) {
+      return res.status(400).json({ success: false, message: '该商品已经申请退货或已退货' });
+    }
+
+    item.logisticsStatus = '退货中';
+    await order.save();
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: '服务器错误' });
+  }
+}

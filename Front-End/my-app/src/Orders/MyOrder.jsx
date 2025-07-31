@@ -61,6 +61,32 @@ function MyOrders() {
       '已退货': allItems.filter(i => i.logisticsStatus === '已退货').length
     };
 
+
+   const  handleRefund = async(a,b) => {
+      const confirmRefund = window.confirm('确定要申请退款吗？');
+      if (!confirmRefund) return;
+
+      try {
+        const res = await axios.post('http://localhost:3000/api/order/requestRefund', {
+          orderId: a,
+          itemId: b 
+        });
+
+        if (res.data.success) {
+          alert('退款申请已提交 ✅');
+          const refreshed = await axios.get(`http://localhost:3000/api/order/myOrders?email=${user.email}`);
+          setOrders(refreshed.data.orders || []);
+          // 可选：更新状态 UI，例如 setOrders(...) 或重新拉取数据
+        } else {
+          alert('退款申请失败 ❌: ' + res.data.message);
+        }
+      } catch (err) {
+        console.error('退款申请出错:', err);
+        alert('网络错误或服务器异常 ❌');
+      }
+    
+    }
+
   return (
     <>
       <NavBar />
@@ -119,44 +145,46 @@ function MyOrders() {
 
 
 
-{filteredItems.length === 0 ? (
-          <p>没有符合条件的订单商品。</p>
-        ) : (
-  filteredItems.map((item, idx) => (
-    <div key={idx} style={{
-      border: '1px solid #ccc',
-      marginBottom: '20px',
-      padding: '15px',
-      borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-    }}>
-      <h4>🧾 订单号：{item.orderId}</h4>
-      <p>🕒 下单时间：{new Date(item.orderTime).toLocaleString()}</p>
+      {filteredItems.length === 0 ? (
+                <p>没有符合条件的订单商品。</p>
+              ) : (
+        filteredItems.map((item, idx) => (
+          <div key={idx} style={{
+            border: '1px solid #ccc',
+            marginBottom: '20px',
+            padding: '15px',
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          }}>
+            <h4>🧾 订单号：{item.orderId}</h4>
+            <p>🕒 下单时间：{new Date(item.orderTime).toLocaleString()}</p>
 
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-        <img src={item.image} alt={item.name} width="100" height="100" style={{ objectFit: 'cover', borderRadius: '8px' }} />
-        <div style={{ marginLeft: '20px' }}>
-          <p style={{ margin: 0, fontWeight: 'bold', fontSize: '1.1em' }}>{item.name}</p>
-          <p style={{ margin: 0 }}>数量：{item.quantity}</p>
-          <p style={{ margin: 0 }}>单价：${item.price.toFixed(2)}</p>
-        </div>
-      </div>
+            <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+              <img src={item.image} alt={item.name} width="100" height="100" style={{ objectFit: 'cover', borderRadius: '8px' }} />
+              <div style={{ marginLeft: '20px' }}>
+                <p style={{ margin: 0, fontWeight: 'bold', fontSize: '1.1em' }}>{item.name}</p>
+                <p style={{ margin: 0 }}>数量：{item.quantity}</p>
+                <p style={{ margin: 0 }}>单价：${item.price.toFixed(2)}</p>
+              </div>
+            </div>
 
-      <p style={{ marginTop: '10px', fontWeight: 'bold' }}>💰 总价：${(item.quantity*item.price).toFixed(2)}</p>
-      <p style={{ marginTop: '5px' }}>🚚 物流状态：{item.logisticsStatus}</p>
+            <p style={{ marginTop: '10px', fontWeight: 'bold' }}>💰 总价：${(item.quantity*item.price).toFixed(2)}</p>
+            <p style={{ marginTop: '5px' }}>🚚 物流状态：{item.logisticsStatus}</p>
 
-      <div style={{display:"inline-block"}} >
-        <button onClick= {()=> {
-          setSelectedOrder(item.fullOrder);   // 👈 保存当前订单
-          setSelectedItem(item)
-          console.log(item)
-          setShowOrderModal(true)
-        }}>查看详情</button>
-        <button>退款</button>  
-                                             
-      </div>
-    </div>
-)))}
+            <div style={{display:"inline-block"}} >
+              <button onClick= {()=> {
+                setSelectedOrder(item.fullOrder);   // 👈 保存当前订单
+                setSelectedItem(item)
+                console.log(item)
+                setShowOrderModal(true)
+              }}
+              style={{ minWidth:'100px'}}
+              >查看详情</button>
+              { filterStatus !== '退货中' && filterStatus !== '已退货' && <button onClick={()=>handleRefund(item.orderId,item._id)} style={{ minWidth:'100px'}} >退款</button>  }
+                                                  
+            </div>
+          </div>
+      )))}
 
 
 
