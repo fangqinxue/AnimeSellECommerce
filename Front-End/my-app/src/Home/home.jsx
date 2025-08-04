@@ -6,16 +6,33 @@ import Footer from '../Components/footer/footer'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdBorderBottom } from "react-icons/md";
+import { AiOutlineBars } from "react-icons/ai";
+import {  useNavigate } from 'react-router-dom';
+import sellerImage from '../assets/seller.png';
+
+
+import { Select } from 'antd';
+
 
 function Home () {
+
+
   const [products, setProducts] = useState([]);
   const [expandedFilters, setExpandedFilters] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [sortOption, setSortOption] = useState("default");
   const [searchQuery, setSearchQuery] = useState(""); // 实际被“提交”搜索的内容
+  const { Option } = Select;
+  const [figureShow, setFigureShow] = useState(false)
+  const [currentCategory, setCurrentCategory] = useState(null); 
+  const [isHovering, setIsHovering] = useState(false);
 
+  const handleHoverChange = (show, categoryName) => {
+    setFigureShow(show);
+    setCurrentCategory(categoryName); // optional
+  };
 
-
+  const Navigate = useNavigate()
 
 
 
@@ -102,11 +119,72 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
     return (
         <div>
                     <NavBar onSearchSubmit={setSearchQuery}></NavBar>
-                    <div style={styles.header}>
-                        <Category></Category>
-                        <FigureCarousel></FigureCarousel>
+                    <div style={styles.header}
 
-                    </div>
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => {
+                      setIsHovering(false);
+                      setFigureShow(false);
+                    }}
+                    >
+                        <Category onHoverChange={handleHoverChange} ></Category>
+                        <div style={{ minWidth:'700px',position: 'relative'}}>
+                          {figureShow && isHovering &&  (
+                            <div style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '600px',
+                              height: '340px',
+                              padding:'50px 50px',
+                              backgroundColor: 'black',
+                              zIndex: 2,
+                              color: 'Coral',
+                              borderRadius: '5px',
+                              display: "grid",
+                              gridTemplateColumns: "repeat(5, 1fr)", 
+                              gap: "30px", 
+                              flexGrow: 1,
+                            }}>
+                          {currentCategory.map(item => (
+                                  <span
+                                  key={item}
+                                  style={{
+
+                                    fontSize: '20px',
+                                    textAlign: 'center',
+                                    height:'20px',
+                                    borderRight:'1px solid white',
+                                    cursor:'pointer'
+                                    
+                                  }}
+                                  >
+                                  {item}
+                                  </span>
+                              ))}
+                            </div>
+                          )}  
+
+                        <FigureCarousel></FigureCarousel>
+                        </div>
+
+
+                          <div style={{position:"relative"}}>
+                            <img src={sellerImage}
+                            onClick={() => Navigate("/sellerLogin")}
+                             style={{
+                              width:'380px',
+                              height:'460px',
+                              borderRadius:'10px',
+                              marginRight: "50px",
+                              cursor:'pointer'
+
+                              }}/>
+                          </div>
+
+
+
+                        </div>
 
 
                     <p style={{ textAlign: "center", fontSize: "40px" }}>
@@ -114,6 +192,73 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
                     </p>
 
 
+
+
+
+
+
+                    <div style={styles.sortContainer}>
+
+                    <Select
+                          defaultValue="default"
+                          value={sortOption}
+                          onChange={(value) => setSortOption(value)}
+                          style={{ width:'250px',height:'60px',marginRight:"70px"}}
+                          optionLabelProp="label"
+
+                        >
+                          <Option
+                            value="default"
+                            label={
+                              <div style={{ display: 'flex', alignItems: 'center',justifyContent:'space-between',  fontSize:'20px'}}>
+                                <AiOutlineBars />
+                                <span>Default</span>
+                              </div>
+                            }
+                           
+                          >
+                            Default
+                          </Option>
+
+                          <Option
+                            value="priceLowHigh"
+                            label={
+                              <div style={{ display: 'flex', alignItems: 'center',justifyContent:'space-between',  fontSize:'20px' }}>
+                                <AiOutlineBars />
+                                <span>Price: Low to High</span>
+                              </div>
+                            }
+                          >
+                            Price: Low to High
+                          </Option>
+
+                          <Option
+                            value="priceHighLow"
+                            label={
+                              <div style={{ display: 'flex', alignItems: 'center',justifyContent:'space-between', fontSize:'20px'}}>
+                                <AiOutlineBars />
+                                <span>Price: High to Low</span>
+                              </div>
+                            }
+                          >
+                            Price: High to Low
+                          </Option>
+
+                          <Option
+                            value="newest"
+                            label={
+                              <div style={{ display: 'flex', alignItems: 'center',justifyContent:'space-between' , fontSize:'20px'}}>
+                                <AiOutlineBars />
+                                <span>Newest</span>
+                              </div>
+                            }
+                          >
+                            Newest
+                          </Option>
+                        </Select>
+                    </div>
+
+{/* 
                     <div style={styles.sortContainer}>
                         <label htmlFor="sort" style={{ fontWeight: "bold", marginRight: "10px" }}>Sort by:</label>
                         <select
@@ -127,7 +272,7 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
                           <option value="priceHighLow">Price: High to Low</option>
                           <option value="newest">Newest</option>
                         </select>
-                      </div>
+                      </div> */}
 
                     <div style={styles.container}>
                       <aside style={styles.sidebar}>
@@ -199,8 +344,12 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
 
 const styles = {
     header: {
+      position: 'relative',
       display: "flex",
-      justifyContent: "space-between"
+      alignItems:'center',
+      justifyContent:'space-between',
+      gap:'20px'
+            // justifyContent: "space-between"
     },
     card: {
 
@@ -214,15 +363,17 @@ const styles = {
     container: {
       display:"flex",
       textAlign:"center",
-      margin: "0 auto",
+      margin:"0 auto",
+
+
       padding: "0 20px",
-      width:"100%",
+      width:"80%",
     },
     sidebar: {
       width: "300px",
       minWidth: "200px",
       marginRight: "70px",
-      marginLeft:'60px'
+      // marginLeft:'60px'
       
     },
     filterButton: {

@@ -1,0 +1,216 @@
+import NavBar from "../Components/naviBar/naviBar";
+import FigureCarousel from "../Components/header/header";
+import Category from "../Components/header/category";
+import ProductCard from '../Components/ProductCart/productCart';
+import Footer from '../Components/footer/footer';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { AiOutlineBars } from "react-icons/ai";
+import { Select } from 'antd';
+import { styles } from "./home";
+
+export function Home() {
+    const [products, setProducts] = useState([]);
+    const [expandedFilters, setExpandedFilters] = useState([]);
+    const [selectedFilters, setSelectedFilters] = useState({});
+    const [sortOption, setSortOption] = useState("default");
+    const [searchQuery, setSearchQuery] = useState(""); // 实际被“提交”搜索的内容
+    const { Option } = Select;
+
+
+
+
+
+
+    useEffect(() => {
+        axios.get("http://localhost:3000/api/product/getAllProduct")
+            .then(res => {
+                const enriched = res.data.map(product => ({
+                    ...product,
+                    availability: product.available ? "In Stock" : "Sold Out"
+                }));
+
+                setProducts(enriched);
+                console.log(enriched);
+            }
+
+            )
+            .catch(err => console.log(err));
+    }, []);
+
+
+
+    const toggleFilter = (filter) => {
+        setExpandedFilters(prev => prev.includes(filter) ? prev.filter(f => f !== filter) : [...prev, filter]
+        );
+    };
+
+    const filterOptions = {
+        // Category: ["Figure", "Nendoroid", "Scale", "POP UP PARADE"],
+        Price: ["Under $50", "$50 - $100", "Over $100"],
+        Availability: ["In Stock", "Sold Out"], //暂时不加preorder，因为后端数据没有这一个
+    };
+
+    const filters = ["Price", "Availability"];
+
+
+    const handleFilterChange = (filter, value, checked) => {
+        setSelectedFilters(prev => {
+            const current = prev[filter] || [];
+            const updated = checked
+                ? [...current, value]
+                : current.filter(item => item !== value);
+
+            return {
+                ...prev,
+                [filter]: updated
+            };
+        });
+    };
+
+    const filteredProducts = products.filter(product => {
+        const matchPrice = !selectedFilters.Price || selectedFilters.Price.length === 0 || selectedFilters.Price.some(priceRange => {
+            const price = parseFloat(product.price);
+            if (priceRange === "Under $50") return price < 50;
+            if (priceRange === "$50 - $100") return price >= 50 && price <= 100;
+            if (priceRange === "Over $100") return price > 100;
+            return true;
+        });
+
+        const matchAvailability = !selectedFilters.Availability || selectedFilters.Availability.length === 0 ||
+            selectedFilters.Availability.includes(product.availability); // 确保 product 有这个字段
+
+
+        const matchSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
+
+
+        return matchPrice && matchAvailability && matchSearch;
+    });
+
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+        const priceA = parseFloat(a.price);
+        const priceB = parseFloat(b.price);
+
+        if (sortOption === "priceLowHigh") return priceA - priceB;
+        if (sortOption === "priceHighLow") return priceB - priceA;
+        if (sortOption === "newest") return new Date(b.release_date) - new Date(a.release_date);
+
+        return 0; // 默认顺序
+    });
+
+
+    return (
+        <div>
+            <NavBar onSearchSubmit={setSearchQuery}></NavBar>
+            <div style={styles.header}>
+                <Category></Category>
+                <FigureCarousel></FigureCarousel>
+
+            </div>
+
+
+            <p style={{ textAlign: "center", fontSize: "40px" }}>
+                {searchQuery ? `Search results for: "${searchQuery}"` : "Products"}
+            </p>
+
+
+            <div style={styles.sortContainer}>
+                <label htmlFor="sort" style={{ fontWeight: "bold", marginRight: "10px" }}>
+                    Sort by:
+                </label>
+                <Select
+                    defaultValue="default"
+                    value={sortOption}
+                    onChange={(value) => setSortOption(value)}
+                    style={{ width: 200 }}
+                >
+                    <AiOutlineBars />
+                    <Option value="default">Default</Option>
+                    <Option value="priceLowHigh">Price: Low to High</Option>
+                    <Option value="priceHighLow">Price: High to Low</Option>
+                    <Option value="newest">Newest</Option>
+                </Select>
+            </div>
+
+            {/*
+                                <div style={styles.sortContainer}>
+                                    <label htmlFor="sort" style={{ fontWeight: "bold", marginRight: "10px" }}>Sort by:</label>
+                                    <select
+                                      id="sort"
+                                      value={sortOption}
+                                      onChange={(e) => setSortOption(e.target.value)}
+                                      style={styles.sortSelect}
+                                    >
+                                      <option value="default">Default</option>
+                                      <option value="priceLowHigh">Price: Low to High</option>
+                                      <option value="priceHighLow">Price: High to Low</option>
+                                      <option value="newest">Newest</option>
+                                    </select>
+                                  </div> */}
+
+            <div style={styles.container}>
+                <aside style={styles.sidebar}>
+                    <h3 style={{ textAlign: "left", fontSize: "30px", paddingBottom: '20px', borderBottom: '1px solid black' }}>Filter By:</h3>
+                    {filters.map(filter => (
+                        <div key={filter} style={{ marginBottom: "10px" }}>
+                            <button onClick={() => toggleFilter(filter)} style={{
+                                ...styles.filterButton,
+                                borderBottom: expandedFilters.includes(filter) ? "none" : "1px solid black",
+                                marginBottom: expandedFilters.includes(filter) ? "0" : "30px",
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <div>{filter} </div>
+                                    <div>{expandedFilters.includes(filter) ? '−' : '+'}</div>
+                                </div>
+                            </button>
+                            {expandedFilters.includes(filter) && (
+                                <div style={styles.filterOptions}>
+                                    {(filterOptions[filter] || []).map((option) => (
+                                        <label key={option} style={{
+                                            display: 'flex',
+                                            justifyContent: "left",
+                                            alignItems: 'center',
+                                            fontSize: '18px'
+                                        }}>
+                                            <input
+                                                style={{ width: "20px" }}
+                                                type="checkbox"
+                                                value={option}
+                                                onChange={(e) => handleFilterChange(filter, option, e.target.checked)} />
+                                            {option}
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+
+                        </div>
+                    ))}
+                </aside>
+
+
+
+
+                <div style={styles.card}>
+                    {sortedProducts.length > 0 ? (
+                        sortedProducts.map((pro) => (
+                            <ProductCard key={pro._id} product={pro} />
+                        ))
+                    ) : (
+                        <p style={styles.noResult}>
+                            No products found{searchQuery && ` for "${searchQuery}"`}!
+                        </p>
+                    )}
+                </div>
+
+            </div>
+
+            <Footer></Footer>
+
+
+
+        </div>
+
+
+    );
+}

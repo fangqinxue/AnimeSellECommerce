@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import "./naviBar.css";
 import { isLoggedIn, logout } from '../../utils/auth';
@@ -21,25 +21,39 @@ const styles = {
       padding: '5px 10px',
     },
     search: {
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-      },
-      searchInput: {
-        width: "250px",
-        padding: "6px 10px",
-        borderRadius: "4px",
-        border: "1px solid #ccc",
-      },
-      searchButton: {
-        padding: "6px 12px",
-        borderRadius: "4px",
-        border: "none",
-        backgroundColor: "#E17912",
-        color: "white",
-        cursor: "pointer",
-        fontWeight: 'bold'
-      },
+      display: "flex",
+      alignItems: "center",
+      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+      maxWidth: "1000px",
+      margin: "10px auto",
+
+    },
+    searchInput: {
+      flex: 1,
+      width:'500px',
+      padding: "10px 14px",
+      border: "none",
+      fontSize: "14px",
+      outline: "none",
+      boxSizing: "border-box",
+      borderTopRightRadius: "0",
+      borderBottomRightRadius: "0",
+      marginRight:'0'
+    },
+    searchButton: {
+      width:'100px',
+      padding: "10px 16px",
+      border: "none",
+      backgroundColor: "#E17912",
+      color: "#fff",
+      fontSize: "14px",
+      fontWeight: "bold",
+      cursor: "pointer",
+      boxSizing: "border-box",
+      borderTopLeftRadius: "0",
+      borderBottomLeftRadius: "0",
+      marginLeft:'0'
+    },
       seller:{
         padding:"2px 2px",
         width:"60px",
@@ -73,9 +87,7 @@ const styles = {
       },
 
   };
-  const dropdownItemStyle = {
 
-  };
 
 
 function NavBar ({ onSearchSubmit }) {
@@ -110,8 +122,7 @@ function NavBar ({ onSearchSubmit }) {
     const handleSearch = () => {
         onSearchSubmit(input);  // 传给父组件（Home.jsx）
       };
-    
-      const Navigate = useNavigate();
+
 
 
     // loggedIn 只在 NavBar 组件挂载时检查一次，
@@ -143,12 +154,10 @@ function NavBar ({ onSearchSubmit }) {
     return(
         
         <section className='navbar'>
+          <div className='navbarContent'>
 
             <img src={logo} alt="logo" />
 
-            <div>
-                <button onClick={() => Navigate("/sellerLogin")} style={styles.seller}>卖家中心</button>
-            </div>
 
             <div style={styles.search}>
                 <input
@@ -206,7 +215,9 @@ function NavBar ({ onSearchSubmit }) {
                             fontWeight: 'bold',
                             cursor: 'pointer'
                         }}
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        onClick={() => setDropdownOpen(true)}
+
+                      
                         >
                         {user?.username} 
                         </button>
@@ -263,6 +274,7 @@ function NavBar ({ onSearchSubmit }) {
 
 
             </nav>
+            </div>
 
         </section>
     )

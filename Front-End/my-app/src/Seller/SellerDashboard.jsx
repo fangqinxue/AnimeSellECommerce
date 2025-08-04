@@ -231,6 +231,26 @@ function SellerDashboard () {
           </form>
     
           {message && <p>{message}</p>}
+
+
+                    <button
+                    onClick={() => {
+                      localStorage.removeItem('seller');
+                      localStorage.removeItem('sellerToken');
+                      window.location.href = '/sellerLogin'; // 或者使用 navigate('/seller/login')
+                    }}
+                    style={{
+                      padding: '8px 16px',
+                      backgroundColor: '#E17912',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}
+                    >
+                    登出
+                    </button>
         </div>
       );
 }

@@ -69,8 +69,10 @@ const FigureCarousel = () => {
 
 const styles = {
   carousel: {
-    maxWidth: "50%",
-    margin: "50px auto",
+
+
+
+
     position: "relative",
   },
   imageWrapper: {
