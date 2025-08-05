@@ -12,7 +12,7 @@ function ProfileSetting () {
 
     const handleUsernameChange = async () => {
       if (!username.trim()) {
-        alert("❗用户名不能为空");
+        alert("❗User name cannot be empty");
         return;
       }
       try {
@@ -22,13 +22,13 @@ function ProfileSetting () {
         });
 
        
-        alert('✅ 用户名更新成功');
+        alert('✅ User name updated successfully!');
         // 更新本地存储
         const updatedUser = { ...user, username };
         localStorage.setItem('user', JSON.stringify(updatedUser));
 
       } catch (err) {
-        console.error('更新用户名失败', err);
+        console.error('fail to update', err);
         const errorMessage = err.response.data.message
 
         alert(errorMessage)
@@ -37,16 +37,16 @@ function ProfileSetting () {
   
     const handlePasswordChange = async () => {
       if (!passwords.current || !passwords.new) {
-        alert("❗请填写所有字段");
+        alert("❗Please write all");
         return;
       }
       if (passwords.new.length < 6) {
-        alert("❗新密码长度至少为 6 位");
+        alert("❗New password at least 6 long");
         return;
       }
 
       if (passwords.current === passwords.new) {
-        alert("❗新密码不能与当前密码相同");
+        alert("❗New Password can not be same as old one");
         return;
       }
       
@@ -57,10 +57,10 @@ function ProfileSetting () {
           newPassword: passwords.new,
         });
 
-        alert('✅ 密码更新成功');
+        alert('✅ Password Update Successfully');
         setPasswords({ current: '', new: '' });
       } catch (err) {
-        console.error('更新密码失败', err);
+        console.error('fail to update', err);
         const errorMessage = err.response.data.message
 
         alert(errorMessage)
@@ -71,41 +71,41 @@ function ProfileSetting () {
         switch (selectedSetting) {
           case 'username':
             return (
-              <div>
-                <h3>修改用户名</h3>
+              <div style={{display:"flex", flexDirection:'column', alignItems:'left'}}>
+                <h3>Change User Name</h3>
                 <input
                   type="text"
-                  placeholder="新用户名"
+                  placeholder="New User Name"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   style={style.input}
                 />
-                <button onClick={handleUsernameChange} style={style.button}>保存用户名</button>
+                <button onClick={handleUsernameChange} style={style.button}>Save User Name</button>
               </div>
             );
           case 'password':
             return (
-              <div>
-                <h3>修改密码</h3>
+              <div style={{display:"flex", flexDirection:'column'}}>
+                <h3>Change Password</h3>
                 <input
                   type="password"
-                  placeholder="当前密码"
+                  placeholder="Old Password"
                   value={passwords.current}
                   onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
                   style={style.input}
                 />
                 <input
                   type="password"
-                  placeholder="新密码"
+                  placeholder="New Password"
                   value={passwords.new}
                   onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
                   style={style.input}
                 />
-                <button onClick={handlePasswordChange} style={style.button}>更新密码</button>
+                <button onClick={handlePasswordChange} style={style.button}>Update Password</button>
               </div>
             );
           default:
-            return <p>请选择一个设置项</p>;
+            return <p>Please select an setting item</p>;
         }
       };
 
@@ -130,6 +130,7 @@ function ProfileSetting () {
         container: {
         display: 'flex',
         padding: '20px',
+        margin:"40px 100px"
         },
         input: {
             padding: '8px',
@@ -138,6 +139,7 @@ function ProfileSetting () {
             maxWidth: '300px',
           },
           button: {
+            width:'300px',
             padding: '8px 16px',
             backgroundColor: '#E17912',
             color: '#fff',
@@ -150,6 +152,8 @@ function ProfileSetting () {
     return(
         <>
             <NavBar></NavBar>
+
+            <div style={{textAlign:'center', fontSize:'40px', fontWeight:"bold", color:'orange'}}>Profile Setting</div>
                 <div style={style.container}>
 
                     <div style={style.sidebar}>

@@ -4,6 +4,10 @@ import "./naviBar.css";
 import { isLoggedIn, logout } from '../../utils/auth';
 import React, { useEffect, useState,useRef } from 'react';
 import { FaShoppingCart } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
+import { CiSettings } from "react-icons/ci";
+import { CiLogout } from "react-icons/ci";
+import { TiShoppingCart } from "react-icons/ti";
 
 
 const styles = {
@@ -61,14 +65,18 @@ const styles = {
         cursor:"pointer"
       },
       dropdownItem: {
-        display: 'block',
+        display: 'flex',
+        alignItems:'center',
         padding: '10px 15px',
         textDecoration: 'none',
         color: 'white',
         backgroundColor: 'black',
         borderBottom: '1px solid #eee',
         cursor: 'pointer',
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
+        gap:'50px',
+        height:'25px'
+
 
       },
       dropdownMenu:{
@@ -228,10 +236,10 @@ function NavBar ({ onSearchSubmit }) {
                         className="dropdownMenu"
                         style={styles.dropdownMenu
                           }>
-                            <NavLink to="/profile" className="dropdownItem" style={styles.dropdownItem}>👤 个人资料</NavLink>
-                            <NavLink to="/orders" className="dropdownItem" style={styles.dropdownItem}>📦 我的订单</NavLink>
-                            <NavLink to="/settings" className="dropdownItem" style={styles.dropdownItem}>⚙️ 设置</NavLink>
-                            <div onClick={handleLogout} className="dropdownItem" style={styles.dropdownItem}>🚪 登出</div>
+                            <NavLink to="/profile" className="dropdownItem" style={styles.dropdownItem}><CgProfile />  <p style={{display:'inline-block'}}>Profile</p></NavLink>
+                            <NavLink to="/orders" className="dropdownItem" style={styles.dropdownItem}><TiShoppingCart/>  <p style={{display:'inline'}}>Order</p></NavLink>
+                            <NavLink to="/settings" className="dropdownItem" style={styles.dropdownItem}><CiSettings/>  <p style={{display:'inline'}}>Setting</p></NavLink>
+                            <div onClick={handleLogout} className="dropdownItem" style={styles.dropdownItem}><CiLogout/>  <p style={{display:'inline'}}>Log out</p> </div>
                         </div>
                         )}
                     </div>

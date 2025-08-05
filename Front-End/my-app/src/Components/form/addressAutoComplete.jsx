@@ -6,6 +6,7 @@ const AMapKey = 'b2efdd7f24f6db55515a63fdd3fc8699'; // 请使用你自己的 Key
 function PlaceSearchInput({onChange, onSelect,inputStyle, cityName, valueOld }) {
   const [input, setInput] = useState(valueOld || '');
   const [results, setResults] = useState([]);
+
   const wrapperRef = useRef(null);
   const debounceTimer = useRef(null);
 
@@ -39,14 +40,23 @@ function PlaceSearchInput({onChange, onSelect,inputStyle, cityName, valueOld }) 
         params: {
           key: AMapKey,
           keywords: keyword,
+          
           city: cityName || '全国' ,
           output: 'JSON',
-          offset:10
+          offset:10,
+          extensions: 'all'
         },
       });
 
+
+
       if (res.data.status === '1') {
+
+
+
         setResults(res.data.pois);
+        console.log(res.data.pois)
+        
       } else {
         console.error('搜索失败', res.data.info);
       }
@@ -91,7 +101,7 @@ function PlaceSearchInput({onChange, onSelect,inputStyle, cityName, valueOld }) 
         type="text"
         value={input}
         onChange={handleChange}
-        placeholder="请输入地址关键词"
+        placeholder="Please Enter address key word"
         style={inputStyle}
       />
       {results.length > 0 && (

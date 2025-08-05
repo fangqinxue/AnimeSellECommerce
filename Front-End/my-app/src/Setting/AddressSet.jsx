@@ -33,7 +33,7 @@ function AddressManagement() {
    
   
     const handleDelete = async (id) => {
-      if (window.confirm('确定要删除这个地址吗？')) {
+      if (window.confirm('Are you sure to delete this address?')) {
         await axios.delete(`http://localhost:3000/api/address/deleteAddress/${id}`);
         fetchAddresses();
       }
@@ -86,7 +86,7 @@ function AddressManagement() {
     <>
   <NavBar />
   <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-    <h2>收货地址管理</h2>
+    <h2 style={{color:'orange',fontSize:'30px'}}>Address Management</h2>
 
     {/* 地址列表 */}
     {addresses.map((addr) => (
@@ -94,6 +94,7 @@ function AddressManagement() {
         key={addr._id}
         style={{
           border: '1px solid #ccc',
+          borderRadius:'10px',
           padding: '10px',
           margin: '10px 0',
           backgroundColor: addr.isDefault ? '#e6ffe6' : 'white', // ✅ 高亮默认地址
@@ -113,19 +114,22 @@ function AddressManagement() {
               fontSize: '12px',
             }}
           >
-            ⭐ 默认
+            ⭐ Default
           </span>
         )}
+        <div style={{margin:'20px 30px'}}>
+          <p><strong>{addr.recipientName}</strong> - {addr.phoneNumber}</p>
+          <p>{addr.province} {addr.city} {addr.district} {addr.detail}</p>
+          <p>{addr.postalCode}</p>
 
-        <p><strong>{addr.recipientName}</strong> - {addr.phoneNumber}</p>
-        <p>{addr.province} {addr.city} {addr.district} {addr.detail}</p>
-        <p>{addr.postalCode}</p>
+        </div>
+
 
         <div style={{ marginTop: '10px' }}>
-          <button onClick={() => navigate("/addressEdit", { state: addr })} style={styles.button}>编辑</button>
-          <button onClick={() => handleDelete(addr._id)} style={styles.danger}>删除</button>
+          <button onClick={() => navigate("/addressEdit", { state: addr })} style={styles.button}>Edit</button>
+          <button onClick={() => handleDelete(addr._id)} style={styles.danger}>Delete</button>
           {!addr.isDefault && (
-            <button onClick={() => setAsDefault(addr._id)} style={styles.secondary}>设为默认</button>
+            <button onClick={() => setAsDefault(addr._id)} style={styles.secondary}>Set as Default</button>
           )}
         </div>
       </div>
@@ -166,6 +170,7 @@ function AddressManagement() {
       margin: '8px 0'
     },
     button: {
+      width:'200px',
       padding: '8px 16px',
       marginRight: '10px',
       background: '#E17912',
@@ -174,6 +179,7 @@ function AddressManagement() {
       cursor: 'pointer'
     },
     danger: {
+      width:'200px',
       padding: '8px 16px',
       background: 'red',
       color: 'white',
@@ -182,6 +188,7 @@ function AddressManagement() {
       marginRight: '10px'
     },
     secondary: {
+      width:'300px',
       padding: '8px 16px',
       background: 'gray',
       color: 'white',

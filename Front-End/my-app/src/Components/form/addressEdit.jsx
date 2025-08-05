@@ -16,6 +16,9 @@ function AddressEdit() {
   const user = JSON.parse(localStorage.getItem('user'));
   const isEdit = Boolean(state);
 
+  const dropdownRef = useRef(null);
+const buttonRef = useRef(null);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -106,13 +109,13 @@ function AddressEdit() {
   return (
     <>
       <NavBar />
-      <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-        <h2>{isEdit ? '编辑地址' : '添加新地址'}</h2>
-        <input name="recipientName" placeholder="收件人" value={form.recipientName || ''} onChange={handleChange} style={styles.input} />
-        <input name="phoneNumber" placeholder="手机号" value={form.phoneNumber || ''} onChange={handleChange} style={styles.input} />
-        <input name="province" placeholder="省份" value={form.province || ''} onChange={handleChange} style={styles.input} />
-        <input name="city" placeholder="城市" value={form.city || ''} onChange={handleChange} style={styles.input} />
-        <input name="district" placeholder="区县" value={form.district || ''} onChange={handleChange} style={styles.input} />
+      <div style={{ padding: '20px', maxWidth: '600px', margin: '30px auto' }}>
+        <h2>{isEdit ?  'Save Change' : 'Add Address'}</h2>
+        <input name="recipientName" placeholder="recipientName" value={form.recipientName || ''} onChange={handleChange} style={styles.input} />
+        <input name="phoneNumber" placeholder="phoneNumber" value={form.phoneNumber || ''} onChange={handleChange} style={styles.input} />
+        <input name="province" placeholder="province" value={form.province || ''} onChange={handleChange} style={styles.input} />
+        <input name="city" placeholder="city" value={form.city || ''} onChange={handleChange} style={styles.input} />
+        <input name="district" placeholder="district" value={form.district || ''} onChange={handleChange} style={styles.input} />
 
         <PlaceSearchInput 
           name="detail" 
@@ -123,7 +126,7 @@ function AddressEdit() {
           onSelect={(poi) => {
             setForm(prev => ({
                 ...prev,
-                postalCode: poi.postcode,
+                postalCode: poi.adcode,
                 detail: poi.name+poi.address,
                 province: poi.pname,
                 city: poi.cityname,
@@ -138,13 +141,28 @@ function AddressEdit() {
 
     
             
-        <input name="postalCode" placeholder="邮政编码" value={form.postalCode || ''} onChange={handleChange} style={styles.input} />
-        <label>
-          <input type="checkbox" name="isDefault" checked={form.isDefault  || false} onChange={handleChange} /> 设为默认
+        <input name="postalCode" placeholder="Postcode" value={form.postalCode || ''} onChange={handleChange} style={styles.input} />
+        <label style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '16px',
+            color: '#333',
+            cursor: 'pointer',
+            userSelect: 'none',
+          }}>
+          <input type="checkbox" name="isDefault" checked={form.isDefault  || false} onChange={handleChange}
+              style={{
+                width: '16px',
+                height: '16px',
+                accentColor: 'coral',  
+                cursor: 'pointer',
+              }}
+          /> Set as Default
         </label>
         <br />
         <button onClick={handleSubmit} style={styles.button}>
-          {isEdit ? '保存更改' : '添加地址'}
+          {isEdit ? 'Save Change' : 'Add Address'}
         </button>
 
         
@@ -156,10 +174,11 @@ function AddressEdit() {
 
 const styles = {
   input: {
+
     display: 'block',
     width: '100%',
     padding: '8px',
-    margin: '8px 0'
+    margin: '20px 0'
   },
   button: {
     padding: '10px 20px',

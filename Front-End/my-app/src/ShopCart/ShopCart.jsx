@@ -37,12 +37,12 @@ function ShopCart () {
 
     const handlePay = async() => {
         if (ShopcartAll.length === 0) {
-          alert("🛒 购物车为空，无法支付！");
+          alert("🛒 shopping cart is empty, cannot pay！");
           return;
         }
 
         if (!isLoggedIn()) {
-            const shouldLogin = confirm("🔐 您需要登录后才能支付。现在去登录吗？");
+            const shouldLogin = confirm("🔐 You have to log in at first, do you want to log in now？");
             if (shouldLogin) {
                 // Redirect to login page
                 window.location.href = '/login';
@@ -85,46 +85,62 @@ function ShopCart () {
 
             <NavBar></NavBar>
 
+            <h2 style={{textAlign:'center', color:'orange'}}>Shopping Cart</h2>
+                <div className="" style={{
+                    display:'flex',
+                    flexDirection:'column',
 
-                <div className="">
+                    margin:'30px 300px',
+                    minWidth:'900px'
+                }}> 
 
-                    <h2>Shopping Cart</h2>
+                    
 
 
                     {ShopcartAll.length === 0 ? (
-                        <p>您的购物车是空的。</p>
+                        <p>Your shopping cart is empty</p>
                         ) : (
                         ShopcartAll.map((item) => (
                             <div
                             key={item.id}
                             style={{
                                 border: "1px solid #ccc",
+                                borderRadius:'10px',
                                 marginBottom: "10px",
-                                padding: "10px",
+                                padding: "30px",
                                 display: "flex",
                                 alignItems: "center",
+                                justifyContent:'space-between'
                             }}
                             >
-                            <img
-                                src={item.image}
-                                alt={item.name}
-                                style={{ width: "100px", marginRight: "20px" }}
-                            />
-                            <div style={{ flex: 1 }}>
+                            <div>                            
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    style={{borderRadius:'10px', width: "100px", marginRight: "20px" }}
+                                />
+                            </div>
+
+                            <div >
                                 <h4>{item.name}</h4>
                                 <p>{item.character} - {item.anime}</p>
-                                <p>价格：${item.price.toFixed(2)}</p>
-                                <p>数量：{item.quantity}</p>
+                                <p>Price: ${item.price.toFixed(2)}</p>
+                                <p>Quantity: {item.quantity}</p>
                             </div>
+
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <button onClick={() => {
+                                <button 
+                                style={{width:'50px',height:'50px'}}
+                                onClick={() => {
                                     decreaseQuantity(item.id);
                                     setShopcartAll(getLocalCart());
                                 }}>➖</button>
 
                                 <span>{item.quantity}</span>
 
-                                <button onClick={() => {
+                                <button 
+                                style={{width:'50px',height:'50px'}}
+                                onClick={() => {
                                     const currentItem = ShopcartAll.find(p => p.id === item.id);
                                     console.log(currentItem.stock)
                                     if (currentItem.quantity >= currentItem.stock) {
@@ -135,26 +151,33 @@ function ShopCart () {
                                     setShopcartAll(getLocalCart());
                                 }}>➕</button>
                             </div>
-                            <button onClick={() => removeItem(item.id)}>❌ 移除</button>
+
+                            <div>
+                                <button style={{width:'100px'}} onClick={() => removeItem(item.id)}>Remove</button>
+
+                            </div>
+
                             </div>
                             ))
                         )}                               
                 </div>
 
                 <div style={{ textAlign: "right", marginTop: "20px" }}>
-                    <p style={{ fontWeight: 'bold' }}>总价：${totalPrice.toFixed(2)}</p>
+                    <p style={{ fontWeight: 'bold' , marginRight:'200px'}}>Total Price：${totalPrice.toFixed(2)}</p>
                     <button
                         onClick={handlePay}
                         style={{
+                        width:'300px',
                         padding: "10px 20px",
                         backgroundColor: "#4CAF50",
                         color: "#fff",
                         border: "none",
                         borderRadius: "5px",
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        marginRight:'100px'
                         }}
                     >
-                        💳 去支付
+                        Go to Pay
                     </button>
                 </div>
 
@@ -173,14 +196,14 @@ function ShopCart () {
                         }}>
                         <div  style={{display:'flex',justifyContent:'space-between'
                         }}>
-                            <h3>选择收货地址</h3>
-                            <button>+ 新增地址</button>
+                            <h3>Select an address</h3>
+                            <button>+ add new address</button>
                         </div>
 
 
 
                         {addressList.length === 0 ? (
-                            <p>暂无地址，请添加一个 👇</p>
+                            <p>no address, please add one 👇</p>
                             ) : (
                                     <select
                                     value={selectedAddressId}
@@ -201,11 +224,11 @@ function ShopCart () {
 
 
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <button onClick={() => setShowAddressModal(false)}>取消</button>
+                    <button onClick={() => setShowAddressModal(false)}>Back</button>
                     <button
                         onClick={() => {
                             if (!selectedAddressId) {
-                                alert('请选择地址');
+                                alert('Please select an address');
                                 return;
                             }
                             localStorage.setItem('selectedAddressId', selectedAddressId);
@@ -215,7 +238,7 @@ function ShopCart () {
                             navigate('/checkout');
                         }}
                     >
-                    确认地址并支付 →
+                    Pay →
                     </button>
                     </div>
                     </div>

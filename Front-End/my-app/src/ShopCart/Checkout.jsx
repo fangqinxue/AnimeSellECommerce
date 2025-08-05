@@ -18,7 +18,7 @@ function Checkout() {
         // 获取地址详情
         const fetchAddress = async () => {
           if (!selectedAddressId) {
-            alert('未选择收货地址，请返回购物车重新选择。');
+            alert('You do not select an address.');
             window.location.href = '/shopcart'; // 跳回购物车
             return;
           }
@@ -29,8 +29,8 @@ function Checkout() {
             });
             setAddress(res.data.address);
           } catch (err) {
-            console.error("获取地址失败", err);
-            alert("❌ 获取收货地址失败，请重试");
+            console.error("error", err);
+            alert("❌ error");
           } finally {
             setIsLoading(false);
           }
@@ -41,18 +41,18 @@ function Checkout() {
 
   }, [selectedAddressId]);
 
-  if (isLoading) return <p style={{ textAlign: 'center' }}>加载中...</p>;
+  if (isLoading) return <p style={{ textAlign: 'center' }}>loading...</p>;
 
   console.log(address)
 
-  if (!item || item.length === 0) return <p style={{ textAlign: 'center' }}>没有选择商品进行购买。</p>;
+  if (!item || item.length === 0) return <p style={{ textAlign: 'center' }}>You haven't select a product</p>;
   const totalPrice = item.reduce((sum, product) => sum + product.price * product.quantity, 0);//循环遍历array方法
 
   const user = JSON.parse(localStorage.getItem('user')) || [];
   const userEmail= user.email
 
   const handleCheckOut = async() => {
-    const shouldPay = window.confirm("🛒 确认支付订单？");
+    const shouldPay = window.confirm("🛒 Are you sure to pay?");
 
     if (!shouldPay) {
       return; // 用户取消支付
@@ -70,16 +70,16 @@ function Checkout() {
 
   
         if (res.data.success) {
-          alert('✅ 支付成功，订单已生成！');
+          alert('✅ Pay successfully, already generate order！');
           localStorage.removeItem('guest_cart');
           localStorage.removeItem('selectedAddressId');
           window.location.href = "/";
         } else {
-          alert('❌ 支付失败：' + res.data.message);
+          alert('❌ fail to pay：' + res.data.message);
         }
       } catch (err) {
-        console.error("提交订单失败", err);
-        alert("❌ 网络错误或服务器异常");
+        console.error("fail to pay", err);
+        alert("❌ network error or else");
       }
 
   }
@@ -92,43 +92,41 @@ function Checkout() {
 
       
       <div style={{ textAlign: 'center', padding: '20px' }}>
-        <h2>订单确认</h2>
+        <h2 style={{fontSize:'50px', color:'orange'}}>Order</h2>
 
-
-                {/* 显示收货地址 */}
-        {address ? (
-          <div style={{
-            border: '1px solid #ccc',
-            padding: '15px',
-            marginBottom: '20px',
-            textAlign: 'left',
-            maxWidth: '600px',
-            margin: '0 auto'
-          }}>
-            <h4>📦 收货地址</h4>
-            <p>{address.detail}</p>
-            <p>收件人：{address.recipientName}</p>
-            <p>联系电话：{address.phoneNumber}</p>
-          </div>
-        ) : (
-          <p>⚠️ 未获取到地址信息</p>
-        )}
         
 
 
         
             {item.map((product) => (
-            <div key={product.id} style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
-                <img src={product.image} alt={product.name} style={{ width: '200px' }} />
+            <div key={product.id} style={{borderRadius:'10px', border: "1px solid #ccc", margin: "20px 200px",minWidth:'700px', padding: "10px" ,display:'flex', gap:'40px', alignItems:'center',justifyContent:'space-between'}}>
+                <img src={product.image} alt={product.name} style={{borderRadius:'10px', width: '200px' }} />
+                <div style={{textAlign:"left", width:'100px'}}>
                 <p>{product.name}</p>
-                <p>数量：{product.quantity}</p>
-                <p>单价：${product.price}</p>
-                <p>总价：${(product.price * product.quantity).toFixed(2)}</p>
+                <p>Quantity: {product.quantity}</p>
+                <p>Price: ${product.price}</p>
+                <p>Total Price: ${(product.price * product.quantity).toFixed(2)}</p>
+                </div>
+                        {address ? (
+                  <div style={{
+                    textAlign: 'left',
+                    maxWidth: '600px',
+                    margin: '0 auto'
+                  }}>
+                    <h4>📦 Order Address</h4>
+                    <p>{address.detail}</p>
+                    <p>Recipient Name: {address.recipientName}</p>
+                    <p>Phone: {address.phoneNumber}</p>
+                  </div>
+                ) : (
+                  <p>No Address</p>
+                )}
+
             </div>
             ))}
         
-        <p style={{ fontWeight: 'bold' }}>订单总价：${totalPrice.toFixed(2)}</p>
-        <button style={{ padding: '10px 20px', background: 'green', color: 'white' }} onClick={handleCheckOut}>确认支付</button>
+        <p style={{ fontSize:'30px',fontWeight: 'bold', margin:'50px 20px',color:'DeepSkyBlue' }}>Total Price ${totalPrice.toFixed(2)}</p>
+        <button style={{ width:'300px',padding: '10px 20px', background: 'Chocolate', color: 'white' }} onClick={handleCheckOut}>Pay</button>
       </div>
       <Footer />
     </>

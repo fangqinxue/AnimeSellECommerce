@@ -9,18 +9,18 @@ function Settings() {
 
     const settings = [
       {
-        title: '👤 账户信息',
-        description: '修改用户名、邮箱、密码、头像',
+        title: '👤 Account Detail',
+        description: 'Change user name, password',
         onClick: () => navigate('/profileSetting')
       },
       {
-        title: '📍 地址管理',
-        description: '添加、删除、修改送货地址',
+        title: '📍 Address Management',
+        description: 'Add, Delete, Modify Address',
         onClick: () => navigate('/addressSetting')
       },
       {
-        title: '📦 我的订单',
-        description: '查看历史订单与订单状态',
+        title: '📦 My Order',
+        description: 'Order History and status',
         onClick: () => navigate('/orders')
       }
     ];
@@ -30,7 +30,7 @@ function Settings() {
         <NavBar />
   
         <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto' }}>
-          <h2 style={{ marginBottom: '20px' }}>⚙️ 设置中心</h2>
+          <h2 style={{ marginBottom: '20px' }}>⚙️ Setting</h2>
   
           {settings.map((item, index) => (
             <div
