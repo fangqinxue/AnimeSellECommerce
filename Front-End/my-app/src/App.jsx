@@ -15,6 +15,8 @@ import AddressEdit from "./Components/form/addressEdit";
 import SellerLogin from "./Seller/SellerLogin";
 import SellerRegister from "./Seller/SellerRegister";
 import SellerDashboard from "./Seller/SellerDashboard";
+import SellerAddProduct from "./Seller/SellerAddProduct";
+import SellerProduct from "./Seller/SellerProduct";
 
 function App() {
 
@@ -37,6 +39,8 @@ function App() {
         <Route path="/sellerLogin" element={<SellerLogin></SellerLogin>}></Route>
         <Route path="/sellerRegister" element={<SellerRegister></SellerRegister>}></Route>
         <Route path="/seller/dashboard" element={<SellerDashboard></SellerDashboard>}></Route>
+        <Route path="/seller/dashboard/addProduct" element={<SellerAddProduct></SellerAddProduct>}></Route>
+        <Route path="/seller/products" element={<SellerProduct></SellerProduct>}></Route>
 
 
       </Routes>

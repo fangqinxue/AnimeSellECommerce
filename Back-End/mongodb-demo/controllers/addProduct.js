@@ -11,3 +11,14 @@ exports.addProduct = async (req, res) => {
       }
 
   };
+
+  exports.getAllProductBySellerId = async(req, res) => {
+    try {
+      const { sellerId } = req.query;
+      const query = sellerId ? { seller: sellerId } : {};
+      const products = await Figure.find(query).sort({ createdAt: -1 });
+      res.json(products);
+    } catch (err) {
+      res.status(500).json({ message: '获取商品失败', error: err });
+    }
+  }

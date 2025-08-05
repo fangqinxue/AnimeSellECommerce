@@ -33,14 +33,16 @@ function SellerLogin () {
   
     return (
         <>
-        <form onSubmit={handleLogin}>
-        <h2>商家登录</h2>
-        <input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        <input type="password" placeholder="密码" value={password} onChange={e => setPassword(e.target.value)} />
-        <button type="submit">登录</button>
+        <form style={{ display:'flex', flexDirection:"column", alignItems:'center', width:'500px', border:'1px solid black', margin:'20px auto',marginTop:'60px', borderRadius:'10px'}} onSubmit={handleLogin}>
+        <h2 > Seller Log In</h2>
+        <input  style={{margin:'20px 0', width:'400px'}} type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input style={{margin:'20px 0', width:'400px'}}  type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        <button style={{margin:'20px 0', width:'200px'}}  type="submit" >Log In</button>
         </form>
+        <div style={{textAlign:'center'}}>
+        <button style={{width:'300px'}} onClick={()=>{navigate("/sellerRegister")}}>New Seller</button>
+        </div>
 
-        <button onClick={()=>{navigate("/sellerRegister")}}>新卖家</button>
         </>
 
       
