@@ -17,6 +17,7 @@ import SellerRegister from "./Seller/SellerRegister";
 import SellerDashboard from "./Seller/SellerDashboard";
 import SellerAddProduct from "./Seller/SellerAddProduct";
 import SellerProduct from "./Seller/SellerProduct";
+import SellerOrder from "./Seller/SellerOrder";
 
 function App() {
 
@@ -41,6 +42,8 @@ function App() {
         <Route path="/seller/dashboard" element={<SellerDashboard></SellerDashboard>}></Route>
         <Route path="/seller/dashboard/addProduct" element={<SellerAddProduct></SellerAddProduct>}></Route>
         <Route path="/seller/products" element={<SellerProduct></SellerProduct>}></Route>
+        <Route path="/seller/orders" element={<SellerOrder />}></Route>
+
 
 
       </Routes>

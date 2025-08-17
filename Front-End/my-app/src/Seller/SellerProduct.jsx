@@ -1,41 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import SellerAddProduct from './SellerAddProduct';
 
 function SellerProduct () {
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
     const seller = JSON.parse(localStorage.getItem('seller'));
+    const [editProduct, setEditProduct] = useState(null)
     console.log(seller)
-  
+
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/api/product/getSellerProduct?sellerId=${seller.id}`);
+        const updatedProducts = res.data.map(product => ({
+          ...product,
+          images: product.images.map(img => 
+            img.startsWith('http') ? img : `http://localhost:3000${img}`
+          )
+        }))
+        setProducts(updatedProducts);
+        console.log(updatedProducts)
+      } catch (error) {
+        console.error('获取商品失败', error);
+      }
+    };
+
     useEffect(() => {
-      const fetchProducts = async () => {
-        try {
-          const res = await axios.get(`http://localhost:3000/api/product/getSellerProduct?sellerId=${seller.id}`);
-          const updatedProducts = res.data.map(product => ({
-            ...product,
-            images: product.images.map(img => 
-              img.startsWith('http') ? img : `http://localhost:3000${img}`
-            )
-          }))
-          setProducts(updatedProducts);
-          console.log(updatedProducts)
-        } catch (error) {
-          console.error('获取商品失败', error);
-        }
-      };
-  
+
       fetchProducts();
     }, [seller._id]);
   
     const handleDelete = async (id) => {
       if (!window.confirm('确定要删除这个商品吗？')) return;
       try {
-        await axios.delete(`/api/products/${id}`);
+        await axios.delete(`http://localhost:3000/api/product/products/${id}`);
         setProducts(products.filter((p) => p._id !== id));
       } catch (err) {
         alert('删除失败');
       }
+    };
+    const handleSaveSuccess = async () => {
+      await fetchProducts(); // 重新拉取最新数据
+      setEditProduct(null);  // 关闭编辑弹窗
     };
 
 
@@ -44,12 +51,7 @@ function SellerProduct () {
         <div style={{ padding: '40px' }}>
             <div style={{display:'flex', gap:'50px'}}>        
         <h2>📦 My Product List</h2>
-        <button
-          onClick={() => navigate('/seller/dashboard/addProduct')}
-          style={styles.addBtn}
-        >
-          ➕ Add Product
-        </button></div>
+        </div>
 
   
         {products.length === 0 ? (
@@ -72,7 +74,7 @@ function SellerProduct () {
                 <div style={styles.buttonGroup}>
                   <button
 
-                    onClick={() => {navigate(`/seller/dashboard/addProduct`, { state: product })}}
+                    onClick={() => setEditProduct(product) } //{navigate(`/seller/dashboard/addProduct`, { state: product })}
                     style={styles.editBtn}
                   >
                     Edit
@@ -86,9 +88,41 @@ function SellerProduct () {
                 </div>
               </div>
             ))}
+
+
+          {editProduct && 
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)', // 半透明遮罩
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000, // 确保浮在最上层
+          }}>
+              <div style={{
+                backgroundColor: 'white',
+                padding: '20px',
+                borderRadius: '8px',
+                maxWidth: '90%',
+                maxHeight: '90%',
+                overflowY: 'auto',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+              }}>
+          <SellerAddProduct editProductData={editProduct} onClose={async() => {
+            setEditProduct(null)}}
+            onSaveSuccess={handleSaveSuccess}
+            />
           </div>
+          </div>
+            }
+          </div>
+
         )}
       </div>
+
+
+        
     )
 }
 

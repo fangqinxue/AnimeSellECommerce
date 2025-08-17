@@ -1,5 +1,9 @@
 const Product = require('../models/Product');
 const Order = require('../models/Order')
+const { ObjectId } = require('mongodb');
+
+
+
 
 
 
@@ -151,5 +155,78 @@ exports.requestRefund = async(req,res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: '服务器错误' });
+  }
+}
+
+
+exports.getSellerAllOrder = async (req, res) => {
+  console.log('req.url:', req.url);          // 打印请求 URL 路径
+  console.log('req.params:', req.params);
+  const  sellerId  = req.params.sellerId;
+
+
+  try {
+    const orders = await Order.find({ 'items.seller': sellerId}).sort({ createdAt: -1 });
+    const filteredOrders = orders.map(order => {
+      const sellerItems = order.items.filter(it => String(it.seller) === String(sellerId));
+      const sellerTotal = sellerItems.reduce((sum, it) => sum + it.price * it.quantity, 0);
+      
+      return {
+        _id: order._id,
+        userEmail: order.userEmail,
+        shippingAddress: order.shippingAddress,
+        items: sellerItems,
+        sellerTotal,
+        createdAt: order.createdAt,
+      };
+    });
+    res.json(filteredOrders)
+
+  } catch (err) {
+    res.status(500).json({ error: "获取订单失败" });
+  }
+}
+
+
+exports.PendingConfirmSeller =  async (req, res) => {
+  const { orderId, itemId } = req.params;
+
+  try {
+    const order = await Order.findOneAndUpdate(
+      { _id: orderId, 'items._id': itemId },
+      { $set: { 'items.$.logisticsStatus': '运输中' } }, // 只更新匹配的 item
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: '订单或商品未找到' });
+    }
+
+    res.json(order);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: '服务器错误' });
+  }
+}
+
+
+exports.RefundConfirmSeller =  async (req, res) => {
+  const { orderId, itemId } = req.params;
+
+  try {
+    const order = await Order.findOneAndUpdate(
+      { _id: orderId, 'items._id': itemId },
+      { $set: { 'items.$.logisticsStatus': '已退货' } }, // 只更新匹配的 item
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: '订单或商品未找到' });
+    }
+
+    res.json(order);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: '服务器错误' });
   }
 }
